@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const API = 'http://localhost:5000/api'
@@ -220,7 +220,7 @@ function AdminDashboard({ token, onLogout }) {
     }
 
     return (
-        <main className="main-feed relative">
+        <main className="admin-feed relative">
             <div className="feed-header">
                 <h1><span className="admin-icon-inline"><AdminIcon.Settings /></span> Admin Dashboard</h1>
                 <p>
@@ -517,7 +517,7 @@ function ProfileEditor({ profile, onUpdate }) {
         { key: 'education', label: 'Education' },
         { key: 'email', label: 'Email' },
         { key: 'website', label: 'Website' },
-        { key: 'joined', label: 'Joined' },
+        { key: 'birthday', label: 'Birthday' },
         { key: 'following', label: 'Following', type: 'number' },
         { key: 'followers', label: 'Followers' }, // Changed to text to handle both "1,247" string and numbers if needed, but keeping simple
     ]
@@ -637,16 +637,50 @@ function ExperienceEditor({ experience, onAdd, onUpdate, onDelete }) {
 
 function EducationEditor({ education, onAdd, onUpdate, onDelete }) {
     const [editing, setEditing] = useState(null)
-    const [form, setForm] = useState({ school: '', degree: '', duration: '', desc: '' })
+    const [form, setForm] = useState({ school: '', degree: '', major: '', location: '', duration: '', desc: '', logo: '', currentlyEnrolled: false })
+    const [uploading, setUploading] = useState(false)
+    const fileInputRef = useRef(null)
 
     const resetForm = () => {
-        setForm({ school: '', degree: '', duration: '', desc: '' })
+        setForm({ school: '', degree: '', major: '', location: '', duration: '', desc: '', logo: '', currentlyEnrolled: false })
         setEditing(null)
     }
 
     const startEdit = (item) => {
-        setForm({ school: item.school, degree: item.degree, duration: item.duration, desc: item.desc || '' })
+        setForm({
+            school: item.school || '',
+            degree: item.degree || '',
+            major: item.major || '',
+            location: item.location || '',
+            duration: item.duration || '',
+            desc: item.desc || '',
+            logo: item.logo || '',
+            currentlyEnrolled: item.currentlyEnrolled || false,
+        })
         setEditing(item.id)
+    }
+
+    const handleLogoUpload = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        setUploading(true)
+        try {
+            const formData = new FormData()
+            formData.append('logo', file)
+            const token = localStorage.getItem('admin_token')
+            const res = await fetch(`${API}/upload`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            })
+            const data = await res.json()
+            if (res.ok && data.url) {
+                setForm(prev => ({ ...prev, logo: data.url }))
+            }
+        } catch (err) {
+            console.error('Upload failed', err)
+        }
+        setUploading(false)
     }
 
     const handleSubmit = (e) => {
@@ -665,25 +699,56 @@ function EducationEditor({ education, onAdd, onUpdate, onDelete }) {
             <form className="admin-form" onSubmit={handleSubmit}>
                 <h3>{editing ? <><span className="admin-icon-inline"><AdminIcon.Pencil /></span> Edit Education</> : <><span className="admin-icon-inline"><AdminIcon.Plus /></span> Add Education</>}</h3>
 
+                {/* Logo Upload */}
+                <div className="admin-field">
+                    <label>School Logo</label>
+                    <div className="admin-logo-upload">
+                        <div className="admin-logo-preview">
+                            {form.logo ? <img src={form.logo} alt="Logo" /> : <AdminIcon.FileText />}
+                        </div>
+                        <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleLogoUpload} />
+                        <button type="button" className="admin-upload-btn" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                            {uploading ? 'Uploading...' : form.logo ? 'Change Logo' : 'Upload Logo'}
+                        </button>
+                        {form.logo && <button type="button" className="admin-btn-delete" style={{ fontSize: '0.8rem', padding: '4px 10px' }} onClick={() => setForm({ ...form, logo: '' })}>Remove</button>}
+                    </div>
+                </div>
+
                 <div className="admin-grid">
                     <div className="admin-field">
                         <label>School / University</label>
                         <input className="admin-input" placeholder="e.g. MIT" value={form.school} onChange={e => setForm({ ...form, school: e.target.value })} required />
                     </div>
                     <div className="admin-field">
-                        <label>Degree</label>
-                        <input className="admin-input" placeholder="e.g. BSc Computer Science" value={form.degree} onChange={e => setForm({ ...form, degree: e.target.value })} required />
+                        <label>Degree (Optional)</label>
+                        <input className="admin-input" placeholder="e.g. Bachelor of Science" value={form.degree} onChange={e => setForm({ ...form, degree: e.target.value })} />
+                    </div>
+                </div>
+
+                <div className="admin-grid">
+                    <div className="admin-field">
+                        <label>Major / Specialization (Optional)</label>
+                        <input className="admin-input" placeholder="e.g. Software Engineering" value={form.major} onChange={e => setForm({ ...form, major: e.target.value })} />
+                    </div>
+                    <div className="admin-field">
+                        <label>Location (Optional)</label>
+                        <input className="admin-input" placeholder="e.g. Banda Aceh, Indonesia" value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} />
                     </div>
                 </div>
 
                 <div className="admin-field">
                     <label>Duration</label>
-                    <input className="admin-input" placeholder="e.g. 2016 - 2020" value={form.duration} onChange={e => setForm({ ...form, duration: e.target.value })} required />
+                    <input className="admin-input" placeholder="e.g. 2014 - 2020" value={form.duration} onChange={e => setForm({ ...form, duration: e.target.value })} required />
                 </div>
 
                 <div className="admin-field">
                     <label>Description (Optional)</label>
-                    <textarea className="admin-textarea no-resize" placeholder="Additional details..." value={form.desc} onChange={e => setForm({ ...form, desc: e.target.value })} rows={3} />
+                    <textarea className="admin-textarea no-resize" placeholder="Additional details about your studies..." value={form.desc} onChange={e => setForm({ ...form, desc: e.target.value })} rows={3} />
+                </div>
+
+                <div className="admin-checkbox-row">
+                    <input type="checkbox" id="currentlyEnrolled" checked={form.currentlyEnrolled} onChange={e => setForm({ ...form, currentlyEnrolled: e.target.checked })} />
+                    <label htmlFor="currentlyEnrolled">Currently Enrolled</label>
                 </div>
 
                 <div className="admin-form-actions">
@@ -695,13 +760,21 @@ function EducationEditor({ education, onAdd, onUpdate, onDelete }) {
             <div className="admin-list">
                 {education.map((item) => (
                     <div className="admin-list-item" key={item.id}>
-                        <div className="admin-list-info">
-                            <strong style={{ fontSize: '1.05rem' }}>{item.school}</strong>
-                            <div style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '4px' }}>{item.degree}</div>
-                            {item.desc && <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{item.desc}</p>}
-                            <span className="admin-time" style={{ fontSize: '12px', color: '#666', marginTop: '8px', display: 'block' }}>
-                                <AdminIcon.Check /> {item.duration}
-                            </span>
+                        <div className="admin-list-info" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                            <div className="admin-logo-preview" style={{ minWidth: 40, width: 40, height: 40, borderRadius: 8 }}>
+                                {item.logo ? <img src={item.logo} alt="" /> : <AdminIcon.FileText />}
+                            </div>
+                            <div>
+                                <strong style={{ fontSize: '1.05rem' }}>{item.school}</strong>
+                                {item.degree && <div style={{ color: 'var(--accent)', fontSize: '0.9rem' }}>{item.degree}</div>}
+                                {item.major && <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', fontFamily: 'monospace' }}>{item.major}</div>}
+                                {item.desc && <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: 4 }}>{item.desc}</p>}
+                                <span className="admin-time" style={{ fontSize: '12px', color: '#666', marginTop: '8px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    <AdminIcon.Check /> {item.duration}
+                                    {item.location && <> · {item.location}</>}
+                                    {item.currentlyEnrolled && <span style={{ color: '#00ba7c', fontWeight: 600 }}> · Enrolled</span>}
+                                </span>
+                            </div>
                         </div>
                         <div className="admin-list-actions">
                             <button className="admin-btn-edit" onClick={() => startEdit(item)}>Edit</button>

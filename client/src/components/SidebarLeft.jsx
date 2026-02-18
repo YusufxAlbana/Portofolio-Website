@@ -7,6 +7,8 @@ export function SidebarLeft({ profile }) {
         { id: 'profile', icon: <Icon.User />, label: 'Profile', path: '/' }, // Root points to profile usually
         { id: 'projects', icon: <Icon.Layers />, label: 'Projects', path: '/projects' },
         { id: 'skills', icon: <Icon.Zap />, label: 'Skills', path: '/skills' },
+        { id: 'experience', icon: <Icon.Briefcase />, label: 'Experience', path: '/experience' },
+        { id: 'education', icon: <Icon.GraduationCap />, label: 'Education', path: '/education' },
         { id: 'blog', icon: <Icon.Edit />, label: 'Blog', path: '/blog' },
     ]
 

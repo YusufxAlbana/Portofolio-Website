@@ -68,7 +68,7 @@ button {
 
 .app-layout {
   display: flex;
-  max-width: 1280px;
+  max-width: 1450px;
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -76,7 +76,7 @@ button {
 /* ─── Left Sidebar ─────────────────────────── */
 
 .sidebar-left {
-  width: 275px;
+  width: 220px;
   position: sticky;
   top: 0;
   height: 100vh;
@@ -262,7 +262,13 @@ button {
 .main-feed {
   flex: 1;
   min-width: 0;
-  max-width: 600px;
+  max-width: 900px;
+  border-right: 1px solid var(--border-color);
+}
+
+.admin-feed {
+  flex: 1;
+  min-width: 0;
   border-right: 1px solid var(--border-color);
 }
 
@@ -294,6 +300,7 @@ button {
   background: linear-gradient(135deg, #1a1a2e 0%, #0a192f 50%, #1a1a2e 100%);
   position: relative;
   overflow: hidden;
+  margin-top: 4px;
 }
 
 .profile-banner img {
@@ -685,7 +692,7 @@ button {
 /* ─── Right Sidebar ────────────────────────── */
 
 .sidebar-right {
-  width: 350px;
+  width: 290px;
   padding: 12px 24px;
   position: sticky;
   top: 0;
@@ -1557,4 +1564,280 @@ button {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ─── Education Timeline ──────────────────────────── */
+
+.edu-timeline {
+  position: relative;
+  padding: 24px 0 40px;
+}
+
+.edu-timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, transparent, var(--border-color) 10%, var(--border-color) 90%, transparent);
+  transform: translateX(-50%);
+}
+
+.edu-timeline-item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.edu-timeline-item.left {
+  justify-content: flex-start;
+  padding-right: calc(50% + 24px);
+}
+
+.edu-timeline-item.right {
+  justify-content: flex-end;
+  padding-left: calc(50% + 24px);
+}
+
+.edu-timeline-dot {
+  position: absolute;
+  left: 50%;
+  top: 28px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 3px solid var(--accent);
+  transform: translateX(-50%);
+  z-index: 2;
+  transition: box-shadow 0.3s;
+}
+
+.edu-timeline-item:hover .edu-timeline-dot {
+  box-shadow: 0 0 0 4px rgba(29, 155, 240, 0.2);
+}
+
+.edu-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+
+.edu-card:hover {
+  border-color: rgba(29, 155, 240, 0.3);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.edu-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.edu-card-logo {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.edu-card-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.edu-card-logo svg {
+  width: 24px;
+  height: 24px;
+}
+
+.edu-card-header {
+  flex: 1;
+  min-width: 0;
+}
+
+.edu-school {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.edu-degree {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 2px 0 0;
+  opacity: 0.9;
+}
+
+.edu-major {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.edu-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.edu-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.edu-meta-item svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+
+.edu-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.edu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #00ba7c;
+  background: rgba(0, 186, 124, 0.1);
+  border: 1px solid rgba(0, 186, 124, 0.2);
+}
+
+.edu-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ba7c;
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Responsive: stack on mobile */
+@media (max-width: 600px) {
+  .edu-timeline-line {
+    left: 16px;
+  }
+
+  .edu-timeline-dot {
+    left: 16px;
+    top: 20px;
+  }
+
+  .edu-timeline-item.left,
+  .edu-timeline-item.right {
+    padding-left: 40px;
+    padding-right: 0;
+    justify-content: flex-start;
+  }
+}
+
+/* ─── Admin Logo Upload ───────────────────────────── */
+
+.admin-logo-upload {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-logo-preview {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--text-secondary);
+}
+
+.admin-logo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-upload-btn {
+  padding: 8px 16px;
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-upload-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(29, 155, 240, 0.05);
+}
+
+.admin-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-checkbox-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.admin-checkbox-row label {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
 }

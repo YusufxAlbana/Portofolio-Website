@@ -38,7 +38,7 @@ export function ProfilePage({ profile, skills, experience, education }) {
                         <span className="meta-icon"><Icon.GraduationCap /></span> {profile.education}
                     </span>
                     <span className="profile-meta-item">
-                        <span className="meta-icon"><Icon.Calendar /></span> Joined {profile.joined}
+                        <span className="meta-icon"><Icon.Calendar /></span> Born {profile.birthday}
                     </span>
                 </div>
 
@@ -48,41 +48,7 @@ export function ProfilePage({ profile, skills, experience, education }) {
                 </div>
             </div>
 
-            {/* Experience Section */}
-            <div className="pinned-label">
-                <span className="pin-icon"><Icon.Briefcase /></span> Experience
-            </div>
-            {sortedExp.map((exp) => (
-                <article className="post-card" key={exp.id}>
-                    <div className="post-content" style={{ width: '100%' }}>
-                        <div className="post-header">
-                            <span className="post-name">{exp.role}</span>
-                            <span className="post-handle">@ {exp.company}</span>
-                            <span className="post-dot">·</span>
-                            <span className="post-time">{exp.duration}</span>
-                        </div>
-                        <div className="post-text">{exp.desc}</div>
-                    </div>
-                </article>
-            ))}
 
-            {/* Education Section */}
-            <div className="pinned-label">
-                <span className="pin-icon"><Icon.GraduationCap /></span> Education
-            </div>
-            {sortedEdu.map((edu) => (
-                <article className="post-card" key={edu.id}>
-                    <div className="post-content" style={{ width: '100%' }}>
-                        <div className="post-header">
-                            <span className="post-name">{edu.school}</span>
-                            <span className="post-dot">·</span>
-                            <span className="post-time">{edu.duration}</span>
-                        </div>
-                        <div className="post-text">{edu.degree}</div>
-                        {edu.desc && <div className="post-text" style={{ marginTop: 4, color: '#8899a6', fontSize: '14px' }}>{edu.desc}</div>}
-                    </div>
-                </article>
-            ))}
 
             {/* Pinned Contact Form */}
             <div className="pinned-label">

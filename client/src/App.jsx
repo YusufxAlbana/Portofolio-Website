@@ -9,6 +9,8 @@ import { ProfilePage } from './pages/ProfilePage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { SkillsPage } from './pages/SkillsPage'
 import { BlogPage } from './pages/BlogPage'
+import { ExperiencePage } from './pages/ExperiencePage'
+import { EducationPage } from './pages/EducationPage'
 
 const API = 'http://localhost:5000/api'
 
@@ -111,6 +113,8 @@ function App() {
           <Route path="/profile" element={<Navigate to="/" replace />} />
           <Route path="/projects" element={<ProjectsPage profile={profile} projects={projects} />} />
           <Route path="/skills" element={<SkillsPage skills={skills} />} />
+          <Route path="/experience" element={<ExperiencePage experience={experience} />} />
+          <Route path="/education" element={<EducationPage education={education} />} />
           <Route path="/blog" element={<BlogPage profile={profile} blog={blog} />} />
         </Route>
         <Route path="/admin" element={<AdminPage />} />
