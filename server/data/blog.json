@@ -1,0 +1,20 @@
+[
+  {
+    "id": "blog-1",
+    "title": "Tech Stack 2026 yang Wajib Dikuasai",
+    "text": "TypeScript — type safety itu penting\nReact / Next.js — still king\nNode.js — versatile backend\nDocker — consistent environments\nAWS / Vercel — deploy anywhere\n\nSetuju gak? #WebDev #FullStack",
+    "time": 1770944432908
+  },
+  {
+    "id": "blog-2",
+    "title": "Clean Code itu Investasi",
+    "text": "Banyak developer fokus bikin fitur tapi lupa maintainability. Code yang clean itu bukan soal pamer, tapi soal respek ke tim dan future-self.\n\nBeberapa prinsip yang selalu saya pegang:\n• Single Responsibility\n• DRY (Don't Repeat Yourself)\n• KISS (Keep It Simple)\n• Meaningful naming\n\n#CleanCode #BestPractices",
+    "time": 1770771632908
+  },
+  {
+    "id": "blog-3",
+    "title": "Kenapa Saya Pilih React dibanding Framework Lain",
+    "text": "Setelah explore Vue, Angular, dan Svelte, React tetap jadi pilihan utama saya. Alasannya:\n\n• Ekosistem paling mature\n• Community support luar biasa\n• Next.js = game changer\n• Hooks bikin code lebih clean\n• Job market masih dominan\n\nBukan berarti framework lain jelek, tapi React paling cocok buat workflow saya. #React #WebDev",
+    "time": 1770166832908
+  }
+]
