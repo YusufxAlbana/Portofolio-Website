@@ -21,7 +21,7 @@ function writeData(type, data) {
 }
 
 // Valid data types
-const VALID_TYPES = ['projects', 'blog', 'skills', 'profile'];
+const VALID_TYPES = ['projects', 'blog', 'skills', 'profile', 'messages', 'experience', 'education'];
 
 // ─── GET /api/data/:type — PUBLIC (no auth) ───────
 router.get('/:type', (req, res) => {
@@ -37,6 +37,29 @@ router.get('/:type', (req, res) => {
   }
 
   res.json(data);
+});
+
+// ─── POST /api/data/messages — PUBLIC (contact form) ──
+router.post('/messages', (req, res) => {
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+      return res.status(400).json({ error: 'Name, email, and message are required' });
+  }
+
+  const messages = readData('messages') || [];
+  const newMessage = {
+      id: Date.now().toString(),
+      name,
+      email,
+      message,
+      time: Date.now(),
+  };
+
+  messages.push(newMessage);
+  writeData('messages', messages);
+
+  res.status(201).json({ message: 'Message sent successfully', data: newMessage });
 });
 
 // ─── POST /api/data/:type — ADMIN (add item) ─────

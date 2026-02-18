@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const API = 'http://localhost:5000/api'
 
@@ -41,7 +42,8 @@ const AdminIcon = {
 
 /* ─── Admin Page ───────────────────────────────────── */
 
-export default function AdminPage({ onBack }) {
+export default function AdminPage() {
+    const navigate = useNavigate()
     const [token, setToken] = useState(localStorage.getItem('admin_token') || '')
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [password, setPassword] = useState('')
@@ -101,7 +103,7 @@ export default function AdminPage({ onBack }) {
                 <div className="feed-header">
                     <h1><span className="admin-icon-inline"><AdminIcon.Lock /></span> Admin Login</h1>
                     <p>
-                        <button className="admin-back-btn" onClick={onBack}>
+                        <button className="admin-back-btn" onClick={() => navigate('/')}>
                             <AdminIcon.ArrowLeft /> Back to site
                         </button>
                     </p>
@@ -127,17 +129,18 @@ export default function AdminPage({ onBack }) {
         )
     }
 
-    return <AdminDashboard token={token} onLogout={handleLogout} onBack={onBack} />
+    return <AdminDashboard token={token} onLogout={handleLogout} />
 }
 
 /* ─── Admin Dashboard ──────────────────────────────── */
 
-function AdminDashboard({ token, onLogout, onBack }) {
+function AdminDashboard({ token, onLogout }) {
+    const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('projects')
-    const [data, setData] = useState({ projects: [], blog: [], skills: {}, profile: {} })
+    const [data, setData] = useState({ projects: [], blog: [], skills: {}, profile: {}, experience: [], education: [] })
     const [notification, setNotification] = useState(null) // { message, type }
 
-    const tabs = ['projects', 'blog', 'skills', 'profile']
+    const tabs = ['projects', 'blog', 'skills', 'experience', 'education', 'profile']
 
     // Notification helper
     const showNotification = (message, type = 'success') => {
@@ -151,7 +154,7 @@ function AdminDashboard({ token, onLogout, onBack }) {
     const fetchAll = async () => {
         try {
             const results = {}
-            for (const type of tabs) {
+            for (const type of ['projects', 'blog', 'skills', 'profile', 'experience', 'education']) {
                 const res = await fetch(`${API}/data/${type}`)
                 results[type] = await res.json()
             }
@@ -221,7 +224,7 @@ function AdminDashboard({ token, onLogout, onBack }) {
             <div className="feed-header">
                 <h1><span className="admin-icon-inline"><AdminIcon.Settings /></span> Admin Dashboard</h1>
                 <p>
-                    <button className="admin-back-btn" onClick={onBack}><AdminIcon.ArrowLeft /> Back</button>
+                    <button className="admin-back-btn" onClick={() => navigate('/')}><AdminIcon.ArrowLeft /> Back</button>
                     {' · '}
                     <button className="admin-back-btn" onClick={onLogout}><AdminIcon.LogOut /> Logout</button>
                 </p>
@@ -273,6 +276,22 @@ function AdminDashboard({ token, onLogout, onBack }) {
                 <ProfileEditor
                     profile={data.profile}
                     onUpdate={(item) => updateItem('profile', 'profile', item)}
+                />
+            )}
+            {activeTab === 'experience' && (
+                <ExperienceEditor
+                    experience={data.experience}
+                    onAdd={(item) => addItem('experience', item)}
+                    onUpdate={(id, item) => updateItem('experience', id, item)}
+                    onDelete={(id) => deleteItem('experience', id)}
+                />
+            )}
+            {activeTab === 'education' && (
+                <EducationEditor
+                    education={data.education}
+                    onAdd={(item) => addItem('education', item)}
+                    onUpdate={(id, item) => updateItem('education', id, item)}
+                    onDelete={(id) => deleteItem('education', id)}
                 />
             )}
         </main>
@@ -529,6 +548,169 @@ function ProfileEditor({ profile, onUpdate }) {
                     <button type="submit" className="admin-btn-primary">Save Profile</button>
                 </div>
             </form>
+        </div>
+    )
+}
+/* ─── Experience Editor ────────────────────────────── */
+
+function ExperienceEditor({ experience, onAdd, onUpdate, onDelete }) {
+    const [editing, setEditing] = useState(null)
+    const [form, setForm] = useState({ role: '', company: '', duration: '', desc: '' })
+
+    const resetForm = () => {
+        setForm({ role: '', company: '', duration: '', desc: '' })
+        setEditing(null)
+    }
+
+    const startEdit = (item) => {
+        setForm({ role: item.role, company: item.company, duration: item.duration, desc: item.desc })
+        setEditing(item.id)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const item = { ...form }
+        if (editing) {
+            onUpdate(editing, item)
+        } else {
+            onAdd(item)
+        }
+        resetForm()
+    }
+
+    return (
+        <div className="admin-section">
+            <form className="admin-form" onSubmit={handleSubmit}>
+                <h3>{editing ? <><span className="admin-icon-inline"><AdminIcon.Pencil /></span> Edit Experience</> : <><span className="admin-icon-inline"><AdminIcon.Plus /></span> Add Experience</>}</h3>
+
+                <div className="admin-grid">
+                    <div className="admin-field">
+                        <label>Role</label>
+                        <input className="admin-input" placeholder="e.g. Software Engineer" value={form.role} onChange={e => setForm({ ...form, role: e.target.value })} required />
+                    </div>
+                    <div className="admin-field">
+                        <label>Company</label>
+                        <input className="admin-input" placeholder="e.g. Google" value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} required />
+                    </div>
+                </div>
+
+                <div className="admin-field">
+                    <label>Duration</label>
+                    <input className="admin-input" placeholder="e.g. Jan 2020 - Present" value={form.duration} onChange={e => setForm({ ...form, duration: e.target.value })} required />
+                </div>
+
+                <div className="admin-field">
+                    <label>Description</label>
+                    <textarea className="admin-textarea no-resize" placeholder="Describe your responsibilities and achievements..." value={form.desc} onChange={e => setForm({ ...form, desc: e.target.value })} required rows={4} />
+                </div>
+
+                <div className="admin-form-actions">
+                    <button type="submit" className="admin-btn-primary">{editing ? 'Update Experience' : 'Add Experience'}</button>
+                    {editing && <button type="button" className="admin-btn-secondary" onClick={resetForm}>Cancel</button>}
+                </div>
+            </form>
+
+            <div className="admin-list">
+                {experience.map((item) => (
+                    <div className="admin-list-item" key={item.id}>
+                        <div className="admin-list-info">
+                            <strong style={{ fontSize: '1.05rem' }}>{item.role}</strong>
+                            <div style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '4px' }}>@{item.company}</div>
+                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{item.desc}</p>
+                            <span className="admin-time" style={{ fontSize: '12px', color: '#666', marginTop: '8px', display: 'block' }}>
+                                <AdminIcon.Check /> {item.duration}
+                            </span>
+                        </div>
+                        <div className="admin-list-actions">
+                            <button className="admin-btn-edit" onClick={() => startEdit(item)}>Edit</button>
+                            <button className="admin-btn-delete" onClick={() => onDelete(item.id)}>Delete</button>
+                        </div>
+                    </div>
+                ))}
+                {experience.length === 0 && <div className="admin-empty-state">No experience added yet.</div>}
+            </div>
+        </div>
+    )
+}
+
+/* ─── Education Editor ─────────────────────────────── */
+
+function EducationEditor({ education, onAdd, onUpdate, onDelete }) {
+    const [editing, setEditing] = useState(null)
+    const [form, setForm] = useState({ school: '', degree: '', duration: '', desc: '' })
+
+    const resetForm = () => {
+        setForm({ school: '', degree: '', duration: '', desc: '' })
+        setEditing(null)
+    }
+
+    const startEdit = (item) => {
+        setForm({ school: item.school, degree: item.degree, duration: item.duration, desc: item.desc || '' })
+        setEditing(item.id)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const item = { ...form }
+        if (editing) {
+            onUpdate(editing, item)
+        } else {
+            onAdd(item)
+        }
+        resetForm()
+    }
+
+    return (
+        <div className="admin-section">
+            <form className="admin-form" onSubmit={handleSubmit}>
+                <h3>{editing ? <><span className="admin-icon-inline"><AdminIcon.Pencil /></span> Edit Education</> : <><span className="admin-icon-inline"><AdminIcon.Plus /></span> Add Education</>}</h3>
+
+                <div className="admin-grid">
+                    <div className="admin-field">
+                        <label>School / University</label>
+                        <input className="admin-input" placeholder="e.g. MIT" value={form.school} onChange={e => setForm({ ...form, school: e.target.value })} required />
+                    </div>
+                    <div className="admin-field">
+                        <label>Degree</label>
+                        <input className="admin-input" placeholder="e.g. BSc Computer Science" value={form.degree} onChange={e => setForm({ ...form, degree: e.target.value })} required />
+                    </div>
+                </div>
+
+                <div className="admin-field">
+                    <label>Duration</label>
+                    <input className="admin-input" placeholder="e.g. 2016 - 2020" value={form.duration} onChange={e => setForm({ ...form, duration: e.target.value })} required />
+                </div>
+
+                <div className="admin-field">
+                    <label>Description (Optional)</label>
+                    <textarea className="admin-textarea no-resize" placeholder="Additional details..." value={form.desc} onChange={e => setForm({ ...form, desc: e.target.value })} rows={3} />
+                </div>
+
+                <div className="admin-form-actions">
+                    <button type="submit" className="admin-btn-primary">{editing ? 'Update Education' : 'Add Education'}</button>
+                    {editing && <button type="button" className="admin-btn-secondary" onClick={resetForm}>Cancel</button>}
+                </div>
+            </form>
+
+            <div className="admin-list">
+                {education.map((item) => (
+                    <div className="admin-list-item" key={item.id}>
+                        <div className="admin-list-info">
+                            <strong style={{ fontSize: '1.05rem' }}>{item.school}</strong>
+                            <div style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '4px' }}>{item.degree}</div>
+                            {item.desc && <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{item.desc}</p>}
+                            <span className="admin-time" style={{ fontSize: '12px', color: '#666', marginTop: '8px', display: 'block' }}>
+                                <AdminIcon.Check /> {item.duration}
+                            </span>
+                        </div>
+                        <div className="admin-list-actions">
+                            <button className="admin-btn-edit" onClick={() => startEdit(item)}>Edit</button>
+                            <button className="admin-btn-delete" onClick={() => onDelete(item.id)}>Delete</button>
+                        </div>
+                    </div>
+                ))}
+                {education.length === 0 && <div className="admin-empty-state">No education added yet.</div>}
+            </div>
         </div>
     )
 }
