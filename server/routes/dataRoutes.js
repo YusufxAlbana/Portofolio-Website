@@ -21,7 +21,7 @@ function writeData(type, data) {
 }
 
 // Valid data types
-const VALID_TYPES = ['projects', 'blog', 'skills', 'profile', 'messages', 'experience', 'education'];
+const VALID_TYPES = ['projects', 'blog', 'skills', 'profile', 'messages', 'certifications', 'education'];
 
 // ─── GET /api/data/:type — PUBLIC (no auth) ───────
 router.get('/:type', (req, res) => {

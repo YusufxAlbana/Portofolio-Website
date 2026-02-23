@@ -1,5 +1,14 @@
 import React, { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Icon } from '../components/Icon'
+
+const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i = 0) => ({
+        opacity: 1, y: 0,
+        transition: { delay: i * 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
+    })
+}
 
 export function ProfilePage({ profile, skills, experience, education }) {
     if (!profile) return <div className="loading">Loading profile...</div>
@@ -10,23 +19,34 @@ export function ProfilePage({ profile, skills, experience, education }) {
 
     return (
         <main className="main-feed">
-
-
-            <div className="profile-banner">
+            <motion.div
+                className="profile-banner"
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.7, ease: 'easeOut' }}
+            >
                 <img src={profile.banner} alt="Banner" />
-            </div>
-            <div className="profile-info">
-                <div className="profile-avatar-large"><img src={profile.photo} alt={profile.name} /></div>
+            </motion.div>
 
+            <motion.div
+                className="profile-info"
+                initial="hidden"
+                animate="visible"
+            >
+                <motion.div className="profile-avatar-large" variants={fadeUp} custom={0}>
+                    <img src={profile.photo} alt={profile.name} />
+                </motion.div>
 
-                <div className="profile-name-block">
+                <motion.div className="profile-name-block" variants={fadeUp} custom={1}>
                     <h2 className="profile-display-name">{profile.name}</h2>
                     <p className="profile-handle">{profile.handle}</p>
-                </div>
+                </motion.div>
 
-                <p className="profile-bio">{profile.bio}</p>
+                <motion.p className="profile-bio" variants={fadeUp} custom={2}>
+                    {profile.bio}
+                </motion.p>
 
-                <div className="profile-meta">
+                <motion.div className="profile-meta" variants={fadeUp} custom={3}>
                     <span className="profile-meta-item">
                         <span className="meta-icon"><Icon.MapPin /></span> {profile.location}
                     </span>
@@ -40,28 +60,36 @@ export function ProfilePage({ profile, skills, experience, education }) {
                     <span className="profile-meta-item">
                         <span className="meta-icon"><Icon.Calendar /></span> Born {profile.birthday}
                     </span>
-                </div>
+                </motion.div>
 
-                <div className="profile-stats">
+                <motion.div className="profile-stats" variants={fadeUp} custom={4}>
                     <span><strong>{profile.following}</strong> Following</span>
                     <span><strong>{profile.followers}</strong> Followers</span>
-                </div>
-            </div>
-
-
+                </motion.div>
+            </motion.div>
 
             {/* Pinned Contact Form */}
-            <div className="pinned-label">
+            <motion.div
+                className="pinned-label"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+            >
                 <span className="pin-icon"><Icon.Mail /></span> Contact Me
-            </div>
-            <article className="post-card">
+            </motion.div>
+            <motion.article
+                className="post-card"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
                 <div className="post-content" style={{ width: '100%' }}>
                     <div className="post-header">
                         <span className="post-name">Mari Bekerja Sama</span>
                     </div>
                     <ContactForm />
                 </div>
-            </article>
+            </motion.article>
         </main>
     )
 }
@@ -82,7 +110,7 @@ function ContactForm() {
 
     return (
         <form className="contact-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '16px' }}>
-            <div className="form-group">
+            <motion.div className="form-group" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
                 <input
                     type="text"
                     placeholder="Your Name"
@@ -91,8 +119,8 @@ function ContactForm() {
                     onChange={e => setForm({ ...form, name: e.target.value })}
                     required
                 />
-            </div>
-            <div className="form-group">
+            </motion.div>
+            <motion.div className="form-group" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
                 <input
                     type="email"
                     placeholder="Your Email"
@@ -101,8 +129,8 @@ function ContactForm() {
                     onChange={e => setForm({ ...form, email: e.target.value })}
                     required
                 />
-            </div>
-            <div className="form-group">
+            </motion.div>
+            <motion.div className="form-group" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }}>
                 <textarea
                     placeholder="Write your message..."
                     className="admin-textarea"
@@ -112,10 +140,19 @@ function ContactForm() {
                     rows={8}
                     style={{ resize: 'none' }}
                 />
-            </div>
-            <button type="submit" className="admin-btn-primary" style={{ alignSelf: 'flex-start' }}>
+            </motion.div>
+            <motion.button
+                type="submit"
+                className="admin-btn-primary"
+                style={{ alignSelf: 'flex-start' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.0 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+            >
                 Kirim ke WhatsApp
-            </button>
+            </motion.button>
         </form>
     )
 }

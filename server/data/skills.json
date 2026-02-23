@@ -1,27 +1,77 @@
 {
   "categories": [],
   "techStack": [
-    "React",
-    "Next.js",
-    "TypeScript",
-    "JavaScript",
-    "Node.js",
-    "Python",
-    "Django",
-    "PostgreSQL",
-    "MongoDB",
-    "Docker",
-    "AWS",
-    "Firebase",
-    "Vercel",
-    "Linux",
-    "Git",
-    "Tailwind",
-    "CSS3",
-    "GraphQL",
-    "REST API",
-    "Figma",
-    "React Native",
-    "TestSkill"
+    {
+      "name": "React",
+      "logo": ""
+    },
+    {
+      "name": "JavaScript",
+      "logo": ""
+    },
+    {
+      "name": "Node.js",
+      "logo": ""
+    },
+    {
+      "name": "Python",
+      "logo": ""
+    },
+    {
+      "name": "AWS",
+      "logo": ""
+    },
+    {
+      "name": "Firebase",
+      "logo": ""
+    },
+    {
+      "name": "Linux",
+      "logo": ""
+    },
+    {
+      "name": "Git",
+      "logo": ""
+    },
+    {
+      "name": "Tailwind",
+      "logo": ""
+    },
+    {
+      "name": "CSS3",
+      "logo": ""
+    },
+    {
+      "name": "HTML5",
+      "logo": ""
+    },
+    {
+      "name": "REST API",
+      "logo": ""
+    },
+    {
+      "name": "Figma",
+      "logo": ""
+    },
+    {
+      "name": "Canva",
+      "logo": ""
+    },
+    {
+      "name": "Supabase",
+      "logo": ""
+    },
+    {
+      "name": "PHP",
+      "logo": ""
+    },
+    {
+      "name": "Flutter",
+      "logo": ""
+    },
+    {
+      "name": "Dart",
+      "logo": ""
+    }
   ]
 }

@@ -84,4 +84,7 @@ export const Icon = {
     Briefcase: () => (
         <svg {...s} viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2" /><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" /></svg>
     ),
+    Award: () => (
+        <svg {...s} viewBox="0 0 24 24"><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></svg>
+    ),
 }

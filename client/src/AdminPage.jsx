@@ -137,10 +137,10 @@ export default function AdminPage() {
 function AdminDashboard({ token, onLogout }) {
     const navigate = useNavigate()
     const [activeTab, setActiveTab] = useState('projects')
-    const [data, setData] = useState({ projects: [], blog: [], skills: {}, profile: {}, experience: [], education: [] })
+    const [data, setData] = useState({ projects: [], blog: [], skills: {}, profile: {}, certifications: [], education: [] })
     const [notification, setNotification] = useState(null) // { message, type }
 
-    const tabs = ['projects', 'blog', 'skills', 'experience', 'education', 'profile']
+    const tabs = ['projects', 'blog', 'skills', 'certifications', 'education', 'profile']
 
     // Notification helper
     const showNotification = (message, type = 'success') => {
@@ -154,7 +154,7 @@ function AdminDashboard({ token, onLogout }) {
     const fetchAll = async () => {
         try {
             const results = {}
-            for (const type of ['projects', 'blog', 'skills', 'profile', 'experience', 'education']) {
+            for (const type of ['projects', 'blog', 'skills', 'profile', 'certifications', 'education']) {
                 const res = await fetch(`${API}/data/${type}`)
                 results[type] = await res.json()
             }
@@ -278,12 +278,12 @@ function AdminDashboard({ token, onLogout }) {
                     onUpdate={(item) => updateItem('profile', 'profile', item)}
                 />
             )}
-            {activeTab === 'experience' && (
-                <ExperienceEditor
-                    experience={data.experience}
-                    onAdd={(item) => addItem('experience', item)}
-                    onUpdate={(id, item) => updateItem('experience', id, item)}
-                    onDelete={(id) => deleteItem('experience', id)}
+            {activeTab === 'certifications' && (
+                <CertificationEditor
+                    certifications={data.certifications}
+                    onAdd={(item) => addItem('certifications', item)}
+                    onUpdate={(id, item) => updateItem('certifications', id, item)}
+                    onDelete={(id) => deleteItem('certifications', id)}
                 />
             )}
             {activeTab === 'education' && (
@@ -302,21 +302,54 @@ function AdminDashboard({ token, onLogout }) {
 
 function ProjectsEditor({ projects, onAdd, onUpdate, onDelete }) {
     const [editing, setEditing] = useState(null)
-    const [form, setForm] = useState({ title: '', desc: '', text: '', tags: '' })
+    const [form, setForm] = useState({ title: '', desc: '', text: '', tags: '', images: [] })
+    const [uploading, setUploading] = useState(false)
+    const fileInputRef = useRef(null)
 
     const resetForm = () => {
-        setForm({ title: '', desc: '', text: '', tags: '' })
+        setForm({ title: '', desc: '', text: '', tags: '', images: [] })
         setEditing(null)
     }
 
     const startEdit = (proj) => {
         setForm({
             title: proj.title,
-            desc: proj.desc,
-            text: proj.text,
-            tags: proj.tags.join(', '),
+            desc: proj.desc || '',
+            text: proj.text || '',
+            tags: (proj.tags || []).join(', '),
+            images: proj.images || [],
         })
         setEditing(proj.id)
+    }
+
+    const handleImageUpload = async (e) => {
+        const files = Array.from(e.target.files)
+        if (files.length === 0) return
+        setUploading(true)
+        try {
+            const formData = new FormData()
+            files.forEach(f => formData.append('images', f))
+            const token = localStorage.getItem('admin_token')
+            const res = await fetch(`${API}/upload-cert-images`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            })
+            const data = await res.json()
+            if (res.ok && data.urls) {
+                setForm(prev => ({ ...prev, images: [...prev.images, ...data.urls] }))
+            } else {
+                alert('Upload failed')
+            }
+        } catch (err) {
+            alert('Upload failed')
+        }
+        setUploading(false)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+
+    const removeImage = (idx) => {
+        setForm(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== idx) }))
     }
 
     const handleSubmit = (e) => {
@@ -341,6 +374,26 @@ function ProjectsEditor({ projects, onAdd, onUpdate, onDelete }) {
                 <textarea className="admin-textarea no-resize" placeholder="Description" value={form.desc} onChange={e => setForm({ ...form, desc: e.target.value })} required />
                 <textarea className="admin-textarea no-resize" placeholder="Tweet text" value={form.text} onChange={e => setForm({ ...form, text: e.target.value })} required />
                 <input className="admin-input" placeholder="Tags (comma separated)" value={form.tags} onChange={e => setForm({ ...form, tags: e.target.value })} />
+
+                {/* Image Upload */}
+                <div className="admin-field">
+                    <label>Project Images</label>
+                    <input type="file" accept="image/*" multiple ref={fileInputRef} style={{ display: 'none' }} onChange={handleImageUpload} />
+                    <button type="button" className="admin-btn-secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                        {uploading ? 'Uploading...' : '📷 Upload Images'}
+                    </button>
+                    {form.images.length > 0 && (
+                        <div className="admin-image-preview-grid">
+                            {form.images.map((url, j) => (
+                                <div key={j} className="admin-image-preview-item">
+                                    <img src={url} alt="" />
+                                    <button type="button" onClick={() => removeImage(j)} className="admin-image-remove">✕</button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
                 <div className="admin-form-actions">
                     <button type="submit" className="admin-btn-primary">{editing ? 'Update' : 'Add'}</button>
                     {editing && <button type="button" className="admin-btn-secondary" onClick={resetForm}>Cancel</button>}
@@ -354,8 +407,13 @@ function ProjectsEditor({ projects, onAdd, onUpdate, onDelete }) {
                             <strong>{proj.title}</strong>
                             <p>{proj.desc}</p>
                             <div className="admin-tags">
-                                {proj.tags.map(t => <span key={t} className="admin-tag">{t}</span>)}
+                                {(proj.tags || []).map(t => <span key={t} className="admin-tag">{t}</span>)}
                             </div>
+                            {proj.images && proj.images.length > 0 && (
+                                <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
+                                    {proj.images.map((url, j) => <img key={j} src={url} alt="" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 6, border: '1px solid var(--border-color)' }} />)}
+                                </div>
+                            )}
                             <span className="admin-time" style={{ fontSize: '12px', color: '#666', marginTop: '4px', display: 'block' }}>
                                 {new Date(proj.time).toLocaleString()}
                             </span>
@@ -434,38 +492,77 @@ function BlogEditor({ posts, onAdd, onUpdate, onDelete }) {
 /* ─── Skills Editor ────────────────────────────────── */
 
 function SkillsEditor({ skills, onUpdate }) {
-    const [categories, setCategories] = useState([])
-    const [techStack, setTechStack] = useState('')
+    const [techStack, setTechStack] = useState([])
+    const [newSkillName, setNewSkillName] = useState('')
+    const [uploading, setUploading] = useState(null) // index of uploading skill
+    const fileRefs = useRef({})
 
     useEffect(() => {
-        if (skills?.categories) setCategories(skills.categories)
-        if (skills?.techStack) setTechStack(skills.techStack.join(', '))
+        if (skills?.techStack) {
+            // Handle both old format (string[]) and new format ({name, logo}[])
+            const normalized = skills.techStack.map(t =>
+                typeof t === 'string' ? { name: t, logo: '' } : t
+            )
+            setTechStack(normalized)
+        }
     }, [skills])
 
     const handleSubmit = (e) => {
         e.preventDefault()
         onUpdate({
-            categories,
-            techStack: techStack.split(',').map(t => t.trim()).filter(Boolean),
+            categories: [],
+            techStack,
         })
     }
 
-    const updateCategory = (i, field, value) => {
-        const updated = [...categories]
-        if (field === 'tags') {
-            updated[i] = { ...updated[i], tags: value.split(',').map(t => t.trim()).filter(Boolean) }
-        } else {
-            updated[i] = { ...updated[i], [field]: value }
+    const addSkill = () => {
+        if (!newSkillName.trim()) return
+        setTechStack([...techStack, { name: newSkillName.trim(), logo: '' }])
+        setNewSkillName('')
+    }
+
+    const removeSkill = (i) => {
+        setTechStack(techStack.filter((_, idx) => idx !== i))
+    }
+
+    const updateSkillName = (i, name) => {
+        const updated = [...techStack]
+        updated[i] = { ...updated[i], name }
+        setTechStack(updated)
+    }
+
+    const handleLogoUpload = async (i, e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        setUploading(i)
+        try {
+            const formData = new FormData()
+            formData.append('logo', file)
+            const token = localStorage.getItem('admin_token')
+            const res = await fetch(`${API}/upload-skill-logo`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            })
+            const data = await res.json()
+            if (res.ok && data.url) {
+                const updated = [...techStack]
+                updated[i] = { ...updated[i], logo: data.url }
+                setTechStack(updated)
+            } else {
+                alert(`Upload failed: ${data.error || 'Unknown error'}`)
+            }
+        } catch (err) {
+            console.error('Upload failed', err)
+            alert('Upload failed.')
         }
-        setCategories(updated)
+        setUploading(null)
     }
 
-    const addCategory = () => {
-        setCategories([...categories, { label: '', tags: [] }])
-    }
-
-    const removeCategory = (i) => {
-        setCategories(categories.filter((_, idx) => idx !== i))
+    const removeLogo = (i) => {
+        const updated = [...techStack]
+        updated[i] = { ...updated[i], logo: '' }
+        setTechStack(updated)
     }
 
     return (
@@ -473,22 +570,65 @@ function SkillsEditor({ skills, onUpdate }) {
             <form className="admin-form" onSubmit={handleSubmit}>
                 <h3><span className="admin-icon-inline"><AdminIcon.FileText /></span> Edit Skills</h3>
 
-                {categories.map((cat, i) => (
-                    <div className="admin-skill-category" key={i}>
-                        <div className="admin-skill-row">
-                            <input className="admin-input" placeholder="Category name" value={cat.label} onChange={e => updateCategory(i, 'label', e.target.value)} />
-                            <button type="button" className="admin-btn-delete" onClick={() => removeCategory(i)}><AdminIcon.X /></button>
+                {/* Add new skill */}
+                <div className="admin-skill-row" style={{ marginBottom: 16 }}>
+                    <input
+                        className="admin-input"
+                        placeholder="New skill name (e.g. React)"
+                        value={newSkillName}
+                        onChange={e => setNewSkillName(e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addSkill() } }}
+                    />
+                    <button type="button" className="admin-btn-secondary" onClick={addSkill}>
+                        <AdminIcon.Plus /> Add
+                    </button>
+                </div>
+
+                {/* Skills list */}
+                <div className="admin-list">
+                    {techStack.map((skill, i) => (
+                        <div className="admin-list-item" key={i} style={{ alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1, minWidth: 0 }}>
+                                {/* Logo preview */}
+                                <div className="admin-logo-preview" style={{ minWidth: 40, width: 40, height: 40, borderRadius: 8, flexShrink: 0 }}>
+                                    {skill.logo ? <img src={skill.logo} alt="" /> : <AdminIcon.FileText />}
+                                </div>
+                                {/* Name input */}
+                                <input
+                                    className="admin-input"
+                                    value={skill.name}
+                                    onChange={e => updateSkillName(i, e.target.value)}
+                                    style={{ flex: 1 }}
+                                />
+                            </div>
+                            <div className="admin-list-actions" style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
+                                <input
+                                    type="file"
+                                    accept="image/*,.svg"
+                                    ref={el => fileRefs.current[i] = el}
+                                    style={{ display: 'none' }}
+                                    onChange={e => handleLogoUpload(i, e)}
+                                />
+                                <button
+                                    type="button"
+                                    className="admin-upload-btn"
+                                    onClick={() => fileRefs.current[i]?.click()}
+                                    disabled={uploading === i}
+                                    style={{ fontSize: '0.75rem', padding: '4px 10px' }}
+                                >
+                                    {uploading === i ? '...' : skill.logo ? '🔄' : '📷'}
+                                </button>
+                                {skill.logo && (
+                                    <button type="button" className="admin-btn-delete" onClick={() => removeLogo(i)} style={{ fontSize: '0.7rem', padding: '4px 8px' }}>✕</button>
+                                )}
+                                <button type="button" className="admin-btn-delete" onClick={() => removeSkill(i)} style={{ fontSize: '0.75rem', padding: '4px 10px' }}>Delete</button>
+                            </div>
                         </div>
-                        <input className="admin-input" placeholder="Tags (comma separated)" value={cat.tags.join(', ')} onChange={e => updateCategory(i, 'tags', e.target.value)} />
-                    </div>
-                ))}
+                    ))}
+                    {techStack.length === 0 && <div className="admin-empty-state">No skills added yet.</div>}
+                </div>
 
-                <button type="button" className="admin-btn-secondary" onClick={addCategory}><AdminIcon.Plus /> Add Category</button>
-
-                <h3 style={{ marginTop: 16 }}>All Technologies</h3>
-                <textarea className="admin-textarea no-resize" placeholder="All tech (comma separated)" value={techStack} onChange={e => setTechStack(e.target.value)} rows={3} />
-
-                <div className="admin-form-actions">
+                <div className="admin-form-actions" style={{ marginTop: 16 }}>
                     <button type="submit" className="admin-btn-primary">Save Skills</button>
                 </div>
             </form>
@@ -551,20 +691,52 @@ function ProfileEditor({ profile, onUpdate }) {
         </div>
     )
 }
-/* ─── Experience Editor ────────────────────────────── */
+/* ─── Certification Editor ─────────────────────────── */
 
-function ExperienceEditor({ experience, onAdd, onUpdate, onDelete }) {
+function CertificationEditor({ certifications, onAdd, onUpdate, onDelete }) {
     const [editing, setEditing] = useState(null)
-    const [form, setForm] = useState({ role: '', company: '', duration: '', desc: '' })
+    const [form, setForm] = useState({ title: '', images: [] })
+    const [uploading, setUploading] = useState(false)
+    const fileInputRef = useRef(null)
 
     const resetForm = () => {
-        setForm({ role: '', company: '', duration: '', desc: '' })
+        setForm({ title: '', images: [] })
         setEditing(null)
     }
 
     const startEdit = (item) => {
-        setForm({ role: item.role, company: item.company, duration: item.duration, desc: item.desc })
+        setForm({ title: item.title, images: item.images || [] })
         setEditing(item.id)
+    }
+
+    const handleImageUpload = async (e) => {
+        const files = Array.from(e.target.files)
+        if (files.length === 0) return
+        setUploading(true)
+        try {
+            const formData = new FormData()
+            files.forEach(f => formData.append('images', f))
+            const token = localStorage.getItem('admin_token')
+            const res = await fetch(`${API}/upload-cert-images`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` },
+                body: formData,
+            })
+            const data = await res.json()
+            if (res.ok && data.urls) {
+                setForm(prev => ({ ...prev, images: [...prev.images, ...data.urls] }))
+            } else {
+                alert('Upload failed')
+            }
+        } catch (err) {
+            alert('Upload failed')
+        }
+        setUploading(false)
+        if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+
+    const removeImage = (idx) => {
+        setForm(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== idx) }))
     }
 
     const handleSubmit = (e) => {
@@ -581,44 +753,47 @@ function ExperienceEditor({ experience, onAdd, onUpdate, onDelete }) {
     return (
         <div className="admin-section">
             <form className="admin-form" onSubmit={handleSubmit}>
-                <h3>{editing ? <><span className="admin-icon-inline"><AdminIcon.Pencil /></span> Edit Experience</> : <><span className="admin-icon-inline"><AdminIcon.Plus /></span> Add Experience</>}</h3>
+                <h3>{editing ? <><span className="admin-icon-inline"><AdminIcon.Pencil /></span> Edit Certification</> : <><span className="admin-icon-inline"><AdminIcon.Plus /></span> Add Certification</>}</h3>
 
-                <div className="admin-grid">
-                    <div className="admin-field">
-                        <label>Role</label>
-                        <input className="admin-input" placeholder="e.g. Software Engineer" value={form.role} onChange={e => setForm({ ...form, role: e.target.value })} required />
-                    </div>
-                    <div className="admin-field">
-                        <label>Company</label>
-                        <input className="admin-input" placeholder="e.g. Google" value={form.company} onChange={e => setForm({ ...form, company: e.target.value })} required />
-                    </div>
-                </div>
+                <input className="admin-input" placeholder="Certification title" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} required />
 
+                {/* Image Upload */}
                 <div className="admin-field">
-                    <label>Duration</label>
-                    <input className="admin-input" placeholder="e.g. Jan 2020 - Present" value={form.duration} onChange={e => setForm({ ...form, duration: e.target.value })} required />
-                </div>
-
-                <div className="admin-field">
-                    <label>Description</label>
-                    <textarea className="admin-textarea no-resize" placeholder="Describe your responsibilities and achievements..." value={form.desc} onChange={e => setForm({ ...form, desc: e.target.value })} required rows={4} />
+                    <label>Certificate Images</label>
+                    <input type="file" accept="image/*" multiple ref={fileInputRef} style={{ display: 'none' }} onChange={handleImageUpload} />
+                    <button type="button" className="admin-btn-secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                        {uploading ? 'Uploading...' : '📷 Upload Images'}
+                    </button>
+                    {form.images.length > 0 && (
+                        <div className="admin-image-preview-grid">
+                            {form.images.map((url, j) => (
+                                <div key={j} className="admin-image-preview-item">
+                                    <img src={url} alt="" />
+                                    <button type="button" onClick={() => removeImage(j)} className="admin-image-remove">✕</button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="admin-form-actions">
-                    <button type="submit" className="admin-btn-primary">{editing ? 'Update Experience' : 'Add Experience'}</button>
+                    <button type="submit" className="admin-btn-primary">{editing ? 'Update' : 'Add'}</button>
                     {editing && <button type="button" className="admin-btn-secondary" onClick={resetForm}>Cancel</button>}
                 </div>
             </form>
 
             <div className="admin-list">
-                {experience.map((item) => (
+                {(certifications || []).map((item) => (
                     <div className="admin-list-item" key={item.id}>
                         <div className="admin-list-info">
-                            <strong style={{ fontSize: '1.05rem' }}>{item.role}</strong>
-                            <div style={{ color: 'var(--accent)', fontSize: '0.9rem', marginBottom: '4px' }}>@{item.company}</div>
-                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{item.desc}</p>
-                            <span className="admin-time" style={{ fontSize: '12px', color: '#666', marginTop: '8px', display: 'block' }}>
-                                <AdminIcon.Check /> {item.duration}
+                            <strong>{item.title}</strong>
+                            {item.images && item.images.length > 0 && (
+                                <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
+                                    {item.images.map((url, j) => <img key={j} src={url} alt="" style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 6, border: '1px solid var(--border-color)' }} />)}
+                                </div>
+                            )}
+                            <span className="admin-time" style={{ fontSize: '12px', color: '#666', marginTop: '4px', display: 'block' }}>
+                                {new Date(item.time).toLocaleString()}
                             </span>
                         </div>
                         <div className="admin-list-actions">
@@ -627,7 +802,7 @@ function ExperienceEditor({ experience, onAdd, onUpdate, onDelete }) {
                         </div>
                     </div>
                 ))}
-                {experience.length === 0 && <div className="admin-empty-state">No experience added yet.</div>}
+                {(!certifications || certifications.length === 0) && <div className="admin-empty-state">No certifications added yet.</div>}
             </div>
         </div>
     )
@@ -676,9 +851,13 @@ function EducationEditor({ education, onAdd, onUpdate, onDelete }) {
             const data = await res.json()
             if (res.ok && data.url) {
                 setForm(prev => ({ ...prev, logo: data.url }))
+                alert('Logo uploaded successfully!')
+            } else {
+                alert(`Upload failed: ${data.error || 'Unknown error'}`)
             }
         } catch (err) {
             console.error('Upload failed', err)
+            alert('Upload failed. Check console for details.')
         }
         setUploading(false)
     }

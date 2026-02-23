@@ -4,30 +4,46 @@ import { Icon } from '../components/Icon'
 import { TimeAgo } from '../components/TimeAgo'
 
 const cardVariants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: 30 },
     visible: (i) => ({
         opacity: 1, y: 0,
         transition: { delay: i * 0.12, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
     })
 }
 
-export function ProjectsPage({ profile, projects }) {
-    if (!projects) return <div className="loading">Loading projects...</div>
+export function CertificationPage({ profile, certifications }) {
+    if (!certifications) return <div className="loading">Loading certifications...</div>
 
     return (
         <main className="main-feed">
-            {projects.length === 0 ? (
-                <div className="empty-state">No projects yet.</div>
+            <motion.div
+                className="feed-header"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+            >
+                <h1>Certifications</h1>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Achievements and certificates</p>
+            </motion.div>
+
+            {certifications.length === 0 ? (
+                <motion.div
+                    className="empty-state"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                >
+                    No certifications yet.
+                </motion.div>
             ) : (
-                projects.map((proj, i) => (
+                certifications.map((cert, i) => (
                     <motion.article
                         className="post-card"
-                        key={proj.id || i}
+                        key={cert.id}
                         variants={cardVariants}
                         initial="hidden"
                         animate="visible"
                         custom={i}
-                        whileHover={{ backgroundColor: 'rgba(255,255,255,0.02)' }}
                     >
                         <div className="post-avatar"><img src={profile.photo} alt="Profile" /></div>
                         <div className="post-content">
@@ -35,19 +51,19 @@ export function ProjectsPage({ profile, projects }) {
                                 <span className="post-name">{profile.name}</span>
                                 <span className="post-handle">{profile.handle}</span>
                                 <span className="post-dot">·</span>
-                                <span className="post-time"><TimeAgo timestamp={proj.time} /></span>
+                                <span className="post-time"><TimeAgo timestamp={cert.time} /></span>
                             </div>
-                            <div className="post-text">{proj.text}</div>
+                            <div className="post-blog-title">{cert.title}</div>
 
-                            {/* Project Images */}
-                            {proj.images && proj.images.length > 0 && (
+                            {/* Certificate Images */}
+                            {cert.images && cert.images.length > 0 && (
                                 <motion.div
                                     className="cert-images-grid"
                                     initial={{ opacity: 0, scale: 0.96 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: i * 0.12 + 0.2, duration: 0.4 }}
                                 >
-                                    {proj.images.map((img, j) => (
+                                    {cert.images.map((img, j) => (
                                         <a
                                             key={j}
                                             href={img}
@@ -55,28 +71,11 @@ export function ProjectsPage({ profile, projects }) {
                                             rel="noopener noreferrer"
                                             className="cert-image-item"
                                         >
-                                            <img src={img} alt={`${proj.title} - ${j + 1}`} />
+                                            <img src={img} alt={`${cert.title} - ${j + 1}`} />
                                         </a>
                                     ))}
                                 </motion.div>
                             )}
-
-                            <motion.div
-                                className="post-attachment"
-                                initial={{ opacity: 0, scale: 0.96 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: i * 0.12 + 0.3, duration: 0.4 }}
-                            >
-                                <div className="post-attachment-preview">
-                                    <div className="post-attachment-title">{proj.title}</div>
-                                    <div className="post-attachment-desc">{proj.desc}</div>
-                                    <div className="post-attachment-tags">
-                                        {(proj.tags || []).map((tag) => (
-                                            <span className="post-attachment-tag" key={tag}>{tag}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </motion.div>
                         </div>
                     </motion.article>
                 ))

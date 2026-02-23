@@ -9,7 +9,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { SkillsPage } from './pages/SkillsPage'
 import { BlogPage } from './pages/BlogPage'
-import { ExperiencePage } from './pages/ExperiencePage'
+import { CertificationPage } from './pages/CertificationPage'
 import { EducationPage } from './pages/EducationPage'
 
 const API = 'http://localhost:5000/api'
@@ -50,7 +50,7 @@ function App() {
     projects: [],
     blog: [],
     skills: { categories: [], techStack: [] },
-    experience: [],
+    certifications: [],
     education: []
   })
   const [loading, setLoading] = useState(true)
@@ -59,26 +59,26 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [profileRes, projectsRes, blogRes, skillsRes, expRes, eduRes] = await Promise.all([
+        const [profileRes, projectsRes, blogRes, skillsRes, certRes, eduRes] = await Promise.all([
           fetch(`${API}/data/profile`),
           fetch(`${API}/data/projects`),
           fetch(`${API}/data/blog`),
           fetch(`${API}/data/skills`),
-          fetch(`${API}/data/experience`),
+          fetch(`${API}/data/certifications`),
           fetch(`${API}/data/education`),
         ])
 
-        if (!profileRes.ok || !projectsRes.ok || !blogRes.ok || !skillsRes.ok || !expRes.ok || !eduRes.ok) throw new Error('API Error')
+        if (!profileRes.ok || !projectsRes.ok || !blogRes.ok || !skillsRes.ok || !certRes.ok || !eduRes.ok) throw new Error('API Error')
 
-        const [profile, projects, blog, skills, experience, education] = await Promise.all([
+        const [profile, projects, blog, skills, certifications, education] = await Promise.all([
           profileRes.json(),
           projectsRes.json(),
           blogRes.json(),
           skillsRes.json(),
-          expRes.json(),
+          certRes.json(),
           eduRes.json(),
         ])
-        setApiData({ profile, projects, blog, skills, experience, education })
+        setApiData({ profile, projects, blog, skills, certifications, education })
       } catch (err) {
         console.error('Failed to fetch data, make sure server is running.')
       } finally {
@@ -102,18 +102,18 @@ function App() {
   const projects = apiData.projects || []
   const blog = apiData.blog || []
   const skills = apiData.skills || { categories: [], techStack: [] }
-  const experience = apiData.experience || []
+  const certifications = apiData.certifications || []
   const education = apiData.education || []
 
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout apiData={{ profile, projects, blog, skills }} />}>
-          <Route path="/" element={<ProfilePage profile={profile} experience={experience} education={education} />} />
+          <Route path="/" element={<ProfilePage profile={profile} education={education} />} />
           <Route path="/profile" element={<Navigate to="/" replace />} />
           <Route path="/projects" element={<ProjectsPage profile={profile} projects={projects} />} />
           <Route path="/skills" element={<SkillsPage skills={skills} />} />
-          <Route path="/experience" element={<ExperiencePage experience={experience} />} />
+          <Route path="/certifications" element={<CertificationPage profile={profile} certifications={certifications} />} />
           <Route path="/education" element={<EducationPage education={education} />} />
           <Route path="/blog" element={<BlogPage profile={profile} blog={blog} />} />
         </Route>

@@ -692,8 +692,9 @@ button {
 /* ─── Right Sidebar ────────────────────────── */
 
 .sidebar-right {
-  width: 290px;
-  padding: 12px 24px;
+  width: 310px;
+  padding: 12px 24px 12px 20px;
+  margin-left: 8px;
   position: sticky;
   top: 0;
   height: 100vh;
@@ -1102,79 +1103,166 @@ button {
   align-items: center;
 }
 
-/* ─── Skills Page ──────────────────────────── */
+/* ─── Skills Showcase ──────────────────────── */
 
-.skills-page-grid {
+
+.skill-showcase-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px;
+  padding: 24px 20px;
   border-bottom: 1px solid var(--border-color);
 }
 
-.skill-card {
-  padding: 20px 16px;
-  border: 1px solid var(--border-color);
-  transition: var(--transition);
+.skill-showcase-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px 12px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   cursor: default;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.skill-card:hover {
-  background: var(--bg-hover);
+.skill-showcase-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  border-color: rgba(29, 155, 240, 0.5);
+  background: linear-gradient(160deg, rgba(29, 155, 240, 0.1) 0%, rgba(29, 155, 240, 0.02) 100%);
+  box-shadow:
+    0 12px 40px rgba(29, 155, 240, 0.15),
+    0 0 0 1px rgba(29, 155, 240, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-.skill-card-header {
+.skill-showcase-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(29, 155, 240, 0.08) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.skill-showcase-card:hover .skill-showcase-glow {
+  opacity: 1;
+}
+
+.skill-showcase-logo {
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  justify-content: center;
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--accent);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
 }
 
-.skill-card-header h3 {
-  font-size: 1rem;
-  font-weight: 700;
+.skill-showcase-card:hover .skill-showcase-logo {
+  background: linear-gradient(145deg, rgba(29, 155, 240, 0.18) 0%, rgba(29, 155, 240, 0.06) 100%);
+  border-color: rgba(29, 155, 240, 0.35);
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(29, 155, 240, 0.15);
 }
 
-.skill-card-icon {
+.skill-showcase-logo img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.25));
+  transition: transform 0.3s ease;
+}
+
+.skill-showcase-card:hover .skill-showcase-logo img {
+  transform: scale(1.05);
+}
+
+.skill-showcase-logo svg {
+  width: 28px;
+  height: 28px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.skill-showcase-card:hover .skill-showcase-logo svg {
+  opacity: 1;
+}
+
+.skill-showcase-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  letter-spacing: 0.02em;
+  transition: color 0.3s ease;
+  position: relative;
+  z-index: 1;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.skill-showcase-card:hover .skill-showcase-name {
+  color: var(--text-primary);
+}
+
+/* Tech chip logo in sidebar */
+.tech-chip-logo {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  border-radius: 2px;
+  margin-right: 5px;
+  vertical-align: middle;
+  display: inline;
+}
+
+.tech-chip {
   display: flex;
   align-items: center;
-  color: var(--accent);
 }
 
-.skill-card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
+/* ─── Responsive: Skills Showcase ──────────── */
 
-.skill-card-tag {
-  padding: 5px 14px;
-  background: var(--accent-dark);
-  color: var(--accent);
-  border-radius: 50px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  transition: var(--transition);
-}
+@media (max-width: 500px) {
+  .skill-showcase-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 16px 12px;
+  }
 
-.skill-card-tag:hover {
-  background: rgba(29, 155, 240, 0.2);
-}
+  .skill-showcase-card {
+    padding: 18px 8px 14px;
+  }
 
-.skills-all-section {
-  padding: 20px 16px;
-  border-bottom: 1px solid var(--border-color);
-}
+  .skill-showcase-logo {
+    width: 42px;
+    height: 42px;
+  }
 
-.skills-all-title {
-  font-size: 1.1rem;
-  font-weight: 800;
-  margin-bottom: 16px;
-}
+  .skill-showcase-logo img {
+    width: 24px;
+    height: 24px;
+  }
 
-.tech-scroll-full {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  .skill-showcase-name {
+    font-size: 0.72rem;
+  }
 }
 
 /* ─── Blog Page ────────────────────────────── */
@@ -1187,45 +1275,52 @@ button {
   color: var(--text-primary);
 }
 
-/* ─── Responsive: Skills Page ──────────────── */
-
-@media (max-width: 500px) {
-  .skills-page-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ═══════════════════════════════════════════════════
    Admin Panel Styles
    ═══════════════════════════════════════════════════ */
 
+.admin-feed {
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+
 .admin-login {
   display: flex;
   justify-content: center;
-  padding: 60px 16px;
+  padding: 80px 16px;
 }
 
 .admin-login form {
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  background: var(--bg-secondary);
+  padding: 32px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
 }
 
 .admin-login h2 {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 800;
   text-align: center;
+  margin-bottom: 8px;
 }
 
 .admin-error {
   background: rgba(244, 33, 46, 0.1);
   color: #f4212e;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.85rem;
   text-align: center;
+  border: 1px solid rgba(244, 33, 46, 0.2);
 }
 
 .admin-status {
@@ -1240,7 +1335,10 @@ button {
   border: none;
   color: var(--accent);
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .admin-back-btn:hover {
@@ -1252,63 +1350,95 @@ button {
 }
 
 .admin-form {
-  padding: 20px 16px;
+  padding: 24px 20px;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  background: var(--bg-primary);
 }
 
 .admin-form h3 {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 4px;
+}
+
+.admin-icon-inline {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 .admin-input {
   width: 100%;
-  padding: 10px 14px;
+  padding: 11px 14px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--text-primary);
   font-size: 0.9rem;
   font-family: var(--font);
-  transition: var(--transition);
+  transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
 }
 
 .admin-input:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.1);
   outline: none;
+}
+
+.admin-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .admin-textarea {
   width: 100%;
-  padding: 10px 14px;
+  padding: 11px 14px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--text-primary);
   font-size: 0.9rem;
   font-family: var(--font);
   resize: vertical;
   min-height: 80px;
-  transition: var(--transition);
+  transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
+  line-height: 1.5;
 }
 
 .admin-textarea:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.1);
   outline: none;
+}
+
+.admin-textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .admin-form-actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
+  padding-top: 4px;
 }
 
 .admin-btn-primary {
-  padding: 10px 24px;
+  padding: 10px 28px;
   background: var(--accent);
   color: #fff;
   border: none;
@@ -1316,11 +1446,15 @@ button {
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
-  transition: var(--transition);
+  transition: background 0.2s, transform 0.1s;
 }
 
 .admin-btn-primary:hover {
   background: var(--accent-hover);
+}
+
+.admin-btn-primary:active {
+  transform: scale(0.97);
 }
 
 .admin-btn-primary:disabled {
@@ -1330,18 +1464,19 @@ button {
 
 .admin-btn-secondary {
   padding: 10px 24px;
-  background: transparent;
+  background: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: 50px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .admin-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-hover);
+  border-color: var(--text-secondary);
 }
 
 .admin-list {
@@ -1352,10 +1487,10 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
-  padding: 16px;
+  gap: 16px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--border-color);
-  transition: var(--transition);
+  transition: background 0.2s;
 }
 
 .admin-list-item:hover {
@@ -1370,44 +1505,49 @@ button {
 .admin-list-info strong {
   display: block;
   margin-bottom: 4px;
+  font-size: 0.95rem;
 }
 
 .admin-list-info p {
   font-size: 0.85rem;
   color: var(--text-secondary);
-  line-height: 1.4;
+  line-height: 1.5;
+  margin: 0;
 }
 
 .admin-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .admin-tag {
-  padding: 2px 10px;
+  padding: 3px 10px;
   background: var(--accent-dark);
   color: var(--accent);
   border-radius: 50px;
   font-size: 0.72rem;
+  font-weight: 600;
 }
 
 .admin-list-actions {
   display: flex;
   gap: 6px;
   flex-shrink: 0;
+  align-items: center;
 }
 
 .admin-btn-edit {
-  padding: 6px 14px;
+  padding: 6px 16px;
   background: transparent;
   color: var(--accent);
   border: 1px solid var(--accent);
   border-radius: 50px;
   font-size: 0.78rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: background 0.2s;
 }
 
 .admin-btn-edit:hover {
@@ -1415,24 +1555,45 @@ button {
 }
 
 .admin-btn-delete {
-  padding: 6px 14px;
+  padding: 6px 16px;
   background: transparent;
   color: #f4212e;
   border: 1px solid rgba(244, 33, 46, 0.3);
   border-radius: 50px;
   font-size: 0.78rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: var(--transition);
+  transition: background 0.2s;
 }
 
 .admin-btn-delete:hover {
   background: rgba(244, 33, 46, 0.1);
 }
 
+.admin-upload-btn {
+  padding: 6px 14px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.admin-upload-btn:hover {
+  background: var(--bg-hover);
+}
+
+.admin-upload-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .admin-skill-category {
   padding: 12px;
   background: var(--bg-secondary);
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1448,6 +1609,77 @@ button {
   padding: 6px 10px;
 }
 
+.admin-logo-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  color: var(--text-secondary);
+}
+
+.admin-logo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ─── Admin Image Preview Grid ─────────────────── */
+
+.admin-image-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.admin-image-preview-item {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  aspect-ratio: 1;
+  background: var(--bg-secondary);
+}
+
+.admin-image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.admin-image-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: none;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.admin-image-preview-item:hover .admin-image-remove {
+  opacity: 1;
+}
+
+.admin-empty-state {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
 @media (max-width: 600px) {
   .admin-list-item {
     flex-direction: column;
@@ -1458,12 +1690,16 @@ button {
     margin-top: 12px;
     align-self: flex-end;
   }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .admin-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .admin-field label {
@@ -1479,7 +1715,6 @@ button {
 .admin-toast {
   position: absolute;
   top: 70px;
-  /* Below header */
   left: 50%;
   transform: translateX(-50%);
   background: rgba(29, 155, 240, 0.15);
@@ -1498,6 +1733,7 @@ button {
   z-index: 100;
   animation: slide-down 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: none;
+  white-space: nowrap;
 }
 
 .admin-toast.error {
@@ -1524,7 +1760,6 @@ button {
   resize: none;
 }
 
-/* Hide number spinner arrows */
 .admin-input.no-spinner::-webkit-outer-spin-button,
 .admin-input.no-spinner::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -1533,8 +1768,43 @@ button {
 
 .admin-input.no-spinner {
   -moz-appearance: textfield;
-  /* Firefox */
   appearance: none;
+}
+
+/* ─── Certification / Project Image Grid (Frontend) ──── */
+
+.cert-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px;
+  margin-top: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cert-images-grid:has(:only-child) {
+  grid-template-columns: 1fr;
+}
+
+.cert-image-item {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: opacity 0.2s;
+}
+
+.cert-image-item:hover {
+  opacity: 0.85;
+}
+
+.cert-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 
@@ -1570,7 +1840,7 @@ button {
 
 .edu-timeline {
   position: relative;
-  padding: 24px 0 40px;
+  padding: 24px 16px 40px;
 }
 
 .edu-timeline-line {
@@ -1593,11 +1863,13 @@ button {
 .edu-timeline-item.left {
   justify-content: flex-start;
   padding-right: calc(50% + 24px);
+  padding-left: 4px;
 }
 
 .edu-timeline-item.right {
   justify-content: flex-end;
   padding-left: calc(50% + 24px);
+  padding-right: 4px;
 }
 
 .edu-timeline-dot {
