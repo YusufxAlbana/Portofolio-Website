@@ -14,10 +14,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Ensure uploads directories exist
-const uploadsDir = path.join(__dirname, 'uploads', 'logos');
-const skillLogosDir = path.join(__dirname, 'uploads', 'skill-logos');
-const certImagesDir = path.join(__dirname, 'uploads', 'cert-images');
-const blogImagesDir = path.join(__dirname, 'uploads', 'blog-images');
+const uploadsDir = path.join(__dirname, '..', 'client', 'public', 'uploads', 'logos');
+const skillLogosDir = path.join(__dirname, '..', 'client', 'public', 'uploads', 'skill-logos');
+const certImagesDir = path.join(__dirname, '..', 'client', 'public', 'uploads', 'cert-images');
+const blogImagesDir = path.join(__dirname, '..', 'client', 'public', 'uploads', 'blog-images');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -48,8 +48,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve uploaded files (Optional now since vite serves them, but keeping for direct api tests)
+app.use('/uploads', express.static(path.join(__dirname, '..', 'client', 'public', 'uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -71,7 +71,7 @@ app.post('/api/upload', authMiddleware, upload.single('logo'), async (req, res) 
           
       const fileUrl = `/uploads/logos/${filename}`;
       console.log('File uploaded:', fileUrl);
-      res.json({ url: `http://localhost:${PORT}${fileUrl}` });
+      res.json({ url: fileUrl });
   } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to process and save image' });
@@ -94,7 +94,7 @@ app.post('/api/upload-skill-logo', authMiddleware, skillLogoUpload.single('logo'
           
       const fileUrl = `/uploads/skill-logos/${filename}`;
       console.log('Skill logo uploaded:', fileUrl);
-      res.json({ url: `http://localhost:${PORT}${fileUrl}` });
+      res.json({ url: fileUrl });
   } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to process and save image' });
@@ -114,7 +114,7 @@ app.post('/api/upload-cert-images', authMiddleware, certImageUpload.array('image
               .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
               .webp({ quality: 80 })
               .toFile(filepath);
-          return `http://localhost:${PORT}/uploads/cert-images/${filename}`;
+          return `/uploads/cert-images/${filename}`;
       }));
       console.log('Cert images uploaded:', urls);
       res.json({ urls });
@@ -137,7 +137,7 @@ app.post('/api/upload-blog-images', authMiddleware, blogImageUpload.array('image
               .resize(1600, 1600, { fit: 'inside', withoutEnlargement: true })
               .webp({ quality: 80 })
               .toFile(filepath);
-          return `http://localhost:${PORT}/uploads/blog-images/${filename}`;
+          return `/uploads/blog-images/${filename}`;
       }));
       console.log('Blog images uploaded:', urls);
       res.json({ urls });

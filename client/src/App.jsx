@@ -61,12 +61,12 @@ function App() {
     const fetchData = async () => {
       try {
         const [profileRes, projectsRes, blogRes, skillsRes, certRes, eduRes] = await Promise.all([
-          fetch(`${API}/data/profile`),
-          fetch(`${API}/data/projects`),
-          fetch(`${API}/data/blog`),
-          fetch(`${API}/data/skills`),
-          fetch(`${API}/data/certifications`),
-          fetch(`${API}/data/education`),
+          fetch('/data/profile.json'),
+          fetch('/data/projects.json'),
+          fetch('/data/blog.json'),
+          fetch('/data/skills.json'),
+          fetch('/data/certifications.json'),
+          fetch('/data/education.json'),
         ])
 
         if (!profileRes.ok || !projectsRes.ok || !blogRes.ok || !skillsRes.ok || !certRes.ok || !eduRes.ok) throw new Error('API Error')

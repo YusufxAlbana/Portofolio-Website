@@ -4,7 +4,7 @@ const path = require('path');
 const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
-const DATA_DIR = path.join(__dirname, '..', 'data');
+const DATA_DIR = path.join(__dirname, '..', '..', 'client', 'public', 'data');
 
 // Helper: read JSON file
 function readData(type) {
