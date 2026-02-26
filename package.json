@@ -3,15 +3,10 @@
   "version": "1.0.0",
   "description": "MERN Stack Portfolio",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "npm install && cd server && npm install && cd ../client && npm install && npm run build",
-    "server": "cd server && node server.js",
-    "client": "cd client && npm run dev",
-    "install:all": "npm install && cd server && npm install && cd client && npm install"
-  },
-  "dependencies": {
-    "axios": "^1.13.5",
-    "concurrently": "^8.0.0"
+    "start": "node server/server.js",
+    "build": "npm --prefix client install && npm --prefix server install && npm --prefix client run build",
+    "server": "npm --prefix server start",
+    "client": "npm --prefix client run dev"
   },
   "author": "",
   "license": "ISC"
