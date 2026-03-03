@@ -71,7 +71,7 @@
     <div class="max-w-[1280px] mx-auto flex justify-center min-h-screen">
         
         <!-- Left Sidebar (Navigation) -->
-        <header class="w-[88px] xl:w-[275px] flex flex-col justify-between items-center xl:items-start xl:px-3 py-2 border-r border-x-border h-screen sticky top-0 shrink-0">
+        <header class="w-[88px] xl:w-[275px] flex flex-col items-center xl:items-start xl:px-3 py-2 border-r border-x-border shrink-0">
             <div class="w-full flex flex-col items-center xl:items-start gap-1">
                 <!-- Logo -->
                 <a href="#" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-x-hover transition duration-200 mb-2 xl:ml-2">
@@ -79,38 +79,39 @@
                 </a>
                 
                 <!-- Nav Links -->
-                <nav class="w-full flex flex-col items-center xl:items-start gap-2">
-                    <a href="#" class="group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-solid fa-house text-2xl xl:mr-5"></i>
-                        <span class="hidden xl:block text-xl">Home</span>
-                    </a>
-                    <a href="#" class="group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-solid fa-magnifying-glass text-2xl xl:mr-5"></i>
-                        <span class="hidden xl:block text-xl">Explore</span>
-                    </a>
-                    <a href="#" class="group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-regular fa-bell text-2xl xl:mr-5"></i>
-                        <span class="hidden xl:block text-xl">Notifications</span>
-                    </a>
-                    <a href="#" class="group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-regular fa-envelope text-2xl xl:mr-5"></i>
-                        <span class="hidden xl:block text-xl">Messages</span>
-                    </a>
-                    <a href="#" class="group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
+                <nav class="w-full flex flex-col items-center xl:items-start gap-2" id="nav-links">
+                    <a href="#" data-target="posts" class="nav-link active group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
                         <i class="fa-solid fa-user text-2xl xl:mr-5 font-bold"></i>
                         <span class="hidden xl:block text-xl font-bold">Profile</span>
                     </a>
+                    <a href="#" data-target="projects" class="nav-link group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
+                        <i class="fa-solid fa-laptop-code text-2xl xl:mr-5 text-x-textDim group-hover:text-white transition duration-200"></i>
+                        <span class="hidden xl:block text-xl text-x-textDim group-hover:text-white transition duration-200">Projects</span>
+                    </a>
+
+                    <a href="#" data-target="education" class="nav-link group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
+                        <i class="fa-solid fa-graduation-cap text-2xl xl:mr-5 text-x-textDim group-hover:text-white transition duration-200"></i>
+                        <span class="hidden xl:block text-xl text-x-textDim group-hover:text-white transition duration-200">Education</span>
+                    </a>
                 </nav>
 
-                <!-- Post Button -->
+                <!-- CV Button -->
                 <button class="w-12 h-12 xl:w-[90%] xl:h-[52px] bg-x-blue hover:bg-x-blueHover text-white rounded-full font-bold text-[17px] mt-4 shadow-md transition duration-200 flex items-center justify-center">
-                    <i class="fa-solid fa-feather xl:hidden text-xl"></i>
-                    <span class="hidden xl:block">Post</span>
+                    <i class="fa-solid fa-file-pdf xl:hidden text-xl"></i>
+                    <span class="hidden xl:block">CV</span>
                 </button>
             </div>
 
+            <!-- Skills Container in Left Bar (visible on xl screens) -->
+            <div class="hidden xl:block w-full mt-8 px-3">
+                <h3 class="font-extrabold text-[18px] mb-4 text-white">Skills</h3>
+                <div id="sidebar-skills-container" class="flex flex-col gap-5">
+                    <!-- Skills inserted by JS -->
+                </div>
+            </div>
+
             <!-- User Mini Profile -->
-            <div id="nav-profile-card" class="cloak w-full flex items-center justify-between p-3 rounded-full hover:bg-x-hover transition duration-200 cursor-pointer mt-4 xl:w-full">
+            <div id="nav-profile-card" class="cloak w-full flex items-center justify-between p-3 rounded-full hover:bg-x-hover transition duration-200 cursor-pointer mt-8 xl:w-full">
                 <div class="flex items-center">
                     <img id="nav-avatar" src="" alt="User Avatar" class="w-10 h-10 rounded-full object-cover">
                     <div class="hidden xl:flex flex-col ml-3">
@@ -211,7 +212,7 @@
             </div>
 
             <!-- Pinned Tweet -->
-            <div class="px-4 py-3 border-b border-x-border flex items-center gap-2 text-x-textDim text-[13px] font-bold">
+            <div id="pinned-header" class="px-4 py-3 border-b border-x-border flex items-center gap-2 text-x-textDim text-[13px] font-bold">
                 <i class="fa-solid fa-thumbtack ml-6"></i> Pinned
             </div>
 
@@ -247,16 +248,7 @@
                     </button>
                 </div>
 
-                <!-- Trends Card -->
-                <div class="bg-x-darkGray rounded-2xl mb-4 pt-3 overflow-hidden">
-                    <h2 class="font-extrabold text-[20px] px-4 mb-3">What's happening</h2>
-                    <div id="trends-container">
-                        <!-- Trends inserted by JS -->
-                    </div>
-                    <a href="#" class="block p-4 text-x-blue hover:bg-x-hover transition duration-200 text-[15px]">
-                        Show more
-                    </a>
-                </div>
+
 
                 <!-- Who to follow Card -->
                 <div class="bg-x-darkGray rounded-2xl pt-3 overflow-hidden mb-4">

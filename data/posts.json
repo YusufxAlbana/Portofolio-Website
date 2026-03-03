@@ -1,0 +1,44 @@
+{
+    "posts": [
+        {
+            "id": 1,
+            "name": "Yusuf Albana",
+            "handle": "@yusufxalbana",
+            "time": "Pinned",
+            "content": "Hi! 👋 I'm Yusuf, a passionate Frontend Developer with experience building responsive, fast, and accessible web applications.\n\nI specialize in crafting solid UI architectures using modern tech stacks.\n\n🛠️ Core Skills: React.js, Next.js, TypeScript, Tailwind CSS\n\nI'm actively seeking full-time roles. Check out my projects below or let's connect! 👇\n\n#HireMe #FrontendDeveloper #WebDev",
+            "image": ""
+        },
+        {
+            "id": 2,
+            "name": "Yusuf Albana",
+            "handle": "@yusufxalbana",
+            "time": "12h",
+            "content": "🚀 Just launched a new feature-rich E-Commerce Web App!\n\nBuilt entirely with Next.js and Tailwind CSS. It features a complete payment gateway integration via Stripe, real-time inventory tracking, and full SSR support for lightning-fast speeds.\n\n🔗 Live Demo: store.example.com\n👨‍💻 Github: github.com/yusufxalbana/ecommerce-nextjs",
+            "image": "https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=2056&auto=format&fit=crop"
+        },
+        {
+            "id": 3,
+            "name": "Yusuf Albana",
+            "handle": "@yusufxalbana",
+            "time": "2d",
+            "content": "🎨 Modern SaaS Dashboard UI Kit\n\nA beautifully crafted dashboard template utilizing Vanilla JS and Tailwind CSS. Focuses heavily on accessibility and aesthetic micro-interactions. Dark mode included natively! \n\nFeatures Chart.js integration and a modular component structure.\n\n🔗 Preview: dash-ui.example.com",
+            "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop"
+        },
+        {
+            "id": 4,
+            "name": "Yusuf Albana",
+            "handle": "@yusufxalbana",
+            "time": "5d",
+            "content": "🧠 Wrote a comprehensive guide on Optimizing Core Web Vitals in React Applications.\n\nTopics covered:\n- Bundle chunking strategy\n- Avoiding expensive re-renders\n- Lazy loading images using Intersection Observer\n\nRead the full article on my blog! 📖 #ReactJS #Performance",
+            "image": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop"
+        },
+        {
+            "id": 5,
+            "name": "Yusuf Albana",
+            "handle": "@yusufxalbana",
+            "time": "1w",
+            "content": "Developed a real-time collaborative task manager using MERN stack & Socket.io ⚡.\n\nUsers can drag-and-drop tasks, leave comments in real-time, and get notified of updates instantly without refreshing. A huge learning experience in handling WebSockets!\n\n💻 check it out on my repo!",
+            "image": ""
+        }
+    ]
+}
