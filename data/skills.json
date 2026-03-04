@@ -3,31 +3,98 @@
         {
             "category": "Frontend",
             "items": [
-                "React.js",
-                "Next.js",
-                "Vue.js",
-                "Tailwind CSS",
-                "TypeScript"
+                {
+                    "name": "HTML",
+                    "icon": "./assets/icon skill/html.png"
+                },
+                {
+                    "name": "CSS",
+                    "icon": "./assets/icon skill/css.png"
+                },
+                {
+                    "name": "JavaScript",
+                    "icon": "./assets/icon skill/JS.png"
+                },
+                {
+                    "name": "React.js",
+                    "icon": "./assets/icon skill/react.png"
+                },
+                {
+                    "name": "Tailwind CSS",
+                    "icon": "./assets/icon skill/tailwind.png"
+                }
             ]
         },
         {
             "category": "Backend & DB",
             "items": [
-                "Node.js",
-                "Express",
-                "MongoDB",
-                "PostgreSQL",
-                "REST APIs"
+                {
+                    "name": "Node.js",
+                    "icon": "./assets/icon skill/nodejs.png"
+                },
+                {
+                    "name": "PHP",
+                    "icon": "./assets/icon skill/PHP.png"
+                },
+                {
+                    "name": "Laravel",
+                    "icon": "./assets/icon skill/laravel.png"
+                },
+                {
+                    "name": "Python",
+                    "icon": "./assets/icon skill/phython.png"
+                },
+                {
+                    "name": "MongoDB",
+                    "icon": "./assets/icon skill/MongoDB_Logo.png"
+                }
             ]
         },
         {
-            "category": "Tools",
+            "category": "Mobile",
             "items": [
-                "Git",
-                "GitHub",
-                "Vite",
-                "Webpack",
-                "Figma"
+                {
+                    "name": "Dart",
+                    "icon": "./assets/icon skill/dart.png"
+                },
+                {
+                    "name": "Flutter",
+                    "icon": "./assets/icon skill/flutter.png"
+                }
+            ]
+        },
+        {
+            "category": "Design & Tools",
+            "items": [
+                {
+                    "name": "Figma",
+                    "icon": "./assets/icon skill/figma.png"
+                },
+                {
+                    "name": "Canva",
+                    "icon": "./assets/icon skill/canva.png"
+                },
+                {
+                    "name": "CapCut",
+                    "icon": "./assets/icon skill/capcut.png"
+                },
+                {
+                    "name": "Google Workspace",
+                    "icon": "./assets/icon skill/google.png"
+                }
+            ]
+        },
+        {
+            "category": "Language",
+            "items": [
+                {
+                    "name": "Indonesian",
+                    "icon": "./assets/icon skill/indonesian language.png"
+                },
+                {
+                    "name": "English",
+                    "icon": "./assets/icon skill/english language.png"
+                }
             ]
         }
     ]

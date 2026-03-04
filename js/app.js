@@ -6,13 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchData() {
     try {
-        const [profileRes, postsRes, projectsRes, skillsRes, eduRes, trendingRes, suggestRes] = await Promise.all([
+        const [profileRes, postsRes, projectsRes, skillsRes, eduRes, trendingRes, expRes, certRes] = await Promise.all([
             fetch('./data/profile.json'),
             fetch('./data/posts.json'),
             fetch('./data/projects.json'),
             fetch('./data/skills.json'),
             fetch('./data/education.json'),
-            fetch('./data/trending.json')
+            fetch('./data/trending.json'),
+            fetch('./data/experience.json'),
+            fetch('./data/certificate.json')
         ]);
 
         if (!profileRes.ok) throw new Error('Failed to load data files');
@@ -23,6 +25,8 @@ async function fetchData() {
         const skillsData = await skillsRes.json();
         const eduData = await eduRes.json();
         const trendingData = await trendingRes.json();
+        const expData = await expRes.json();
+        const certData = await certRes.json();
 
         portfolioData = {
             profile: profileData.profile,
@@ -30,7 +34,9 @@ async function fetchData() {
             projects: projectsData.projects,
             skills: skillsData.skills,
             education: eduData.education,
-            trending: trendingData.trending
+            trending: trendingData.trending,
+            experience: expData.experience,
+            certificate: certData.certificate
         };
         
         renderProfile(portfolioData.profile);
@@ -51,20 +57,13 @@ async function fetchData() {
 }
 
 function renderProfile(profile) {
-    // Header Info
-    document.getElementById('header-name').textContent = profile.name;
-    document.getElementById('header-post-count').textContent = `1,337 posts`; // Mock count
-
     // Cover & Avatar
     document.getElementById('profile-cover').src = profile.cover;
     document.getElementById('profile-avatar').src = profile.avatar;
-    document.getElementById('nav-avatar').src = profile.avatar;
 
     // Profile Details
     document.getElementById('profile-name').textContent = profile.name;
     document.getElementById('profile-handle').textContent = profile.handle;
-    document.getElementById('nav-name').textContent = profile.name;
-    document.getElementById('nav-handle').textContent = profile.handle;
     
     // Bio (parsing hashtags and links could go here, for now it's plain text)
     document.getElementById('profile-bio').textContent = profile.bio;
@@ -172,8 +171,6 @@ function switchContent(target) {
     const container = document.getElementById('posts-container');
     const profileContainer = document.getElementById('profile-container');
     const pinnedHeader = document.getElementById('pinned-header');
-    const headerName = document.getElementById('header-name');
-    const headerPostCount = document.getElementById('header-post-count');
     
     container.innerHTML = '';
     
@@ -181,20 +178,20 @@ function switchContent(target) {
     if (target === 'posts') {
         profileContainer.classList.remove('hidden');
         if (pinnedHeader) pinnedHeader.classList.remove('hidden');
-        headerName.textContent = portfolioData.profile.name;
-        headerPostCount.textContent = '1,337 posts';
         renderPosts(portfolioData.tweets);
     } else {
         profileContainer.classList.add('hidden');
         if (pinnedHeader) pinnedHeader.classList.add('hidden');
         if (target === 'projects') {
-            headerName.textContent = 'Projects';
-            headerPostCount.textContent = `${portfolioData.projects.length} projects`;
             renderProjects(portfolioData.projects);
         } else if (target === 'education') {
-            headerName.textContent = 'Education';
-            headerPostCount.textContent = `${portfolioData.education.length} schools`;
             renderEducation(portfolioData.education);
+        } else if (target === 'experience') {
+            renderExperience(portfolioData.experience);
+        } else if (target === 'certificate') {
+            renderCertificate(portfolioData.certificate);
+        } else if (target === 'contact') {
+            renderContact();
         }
     }
 }
@@ -259,8 +256,9 @@ function renderSidebarSkills(skills) {
     
     skills.forEach(skillGroup => {
         const skillsHtml = skillGroup.items.map(s => `
-            <div class="bg-black rounded-full px-3 py-1.5 text-[13px] font-medium text-white border border-x-border hover:bg-x-hover transition duration-200 cursor-default">
-                ${s}
+            <div class="flex items-center gap-1.5 bg-black rounded-full px-3 py-1.5 text-[13px] font-medium text-white border border-x-border hover:bg-x-hover transition duration-200 cursor-default">
+                <img src="${s.icon}" alt="${s.name}" class="w-4 h-4 object-contain">
+                <span>${s.name}</span>
             </div>
         `).join('');
 
@@ -281,12 +279,32 @@ function renderEducation(education) {
     education.forEach((edu, index) => {
         const isLast = index === education.length - 1;
         
+        let logoHtml = `
+            <div class="w-10 h-10 rounded-full bg-x-blue/10 flex items-center justify-center text-x-blue border border-x-border">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+        `;
+        if (edu.logo) {
+            logoHtml = `
+                <div class="w-10 h-10 rounded-full border border-x-border overflow-hidden bg-white">
+                    <img src="${edu.logo}" alt="${edu.school} Logo" class="w-full h-full object-cover">
+                </div>
+            `;
+        }
+
+        let imageHtml = '';
+        if (edu.image) {
+            imageHtml = `
+                <div class="mt-3 rounded-2xl border border-x-border overflow-hidden">
+                    <img src="${edu.image}" alt="Education Image" class="w-full h-auto object-cover">
+                </div>
+            `;
+        }
+
         const eduHtml = `
             <article class="p-4 border-b border-x-border hover:bg-x-hover transition duration-200 flex gap-3">
                 <div class="shrink-0 pt-1 flex flex-col items-center">
-                    <div class="w-10 h-10 rounded-full bg-x-blue/10 flex items-center justify-center text-x-blue border border-x-border">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </div>
+                    ${logoHtml}
                     ${!isLast ? '<div class="w-0.5 h-full bg-x-border mt-2"></div>' : ''}
                 </div>
                 <div class="flex-1 min-w-0 pb-2">
@@ -298,6 +316,7 @@ function renderEducation(education) {
                         <span class="text-x-textDim text-[13px] whitespace-nowrap">${edu.duration}</span>
                     </div>
                     <div class="text-[15px] mt-2 whitespace-pre-wrap leading-tight text-white">${edu.description}</div>
+                    ${imageHtml}
                 </div>
             </article>
         `;
@@ -305,19 +324,107 @@ function renderEducation(education) {
     });
 }
 
-// CV Modal Logic
-window.openCvModal = function() {
-    const modal = document.getElementById('cv-modal');
-    if (modal) {
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
-    }
-};
+function renderExperience(experience) {
+    const container = document.getElementById('posts-container');
+    experience.forEach((exp, index) => {
+        const isLast = index === experience.length - 1;
+        
+        let imageHtml = '';
+        if (exp.image) {
+            imageHtml = `
+                <div class="mt-3 rounded-2xl border border-x-border overflow-hidden">
+                    <img src="${exp.image}" alt="Experience Image" class="w-full h-auto object-cover">
+                </div>
+            `;
+        }
 
-window.closeCvModal = function() {
-    const modal = document.getElementById('cv-modal');
-    if (modal) {
-        modal.classList.add('hidden');
-        document.body.style.overflow = ''; // Restore background scrolling
-    }
-};
+        const expHtml = `
+            <article class="p-4 border-b border-x-border hover:bg-x-hover transition duration-200 flex gap-3">
+                <div class="shrink-0 pt-1 flex flex-col items-center">
+                    <div class="w-10 h-10 rounded-full bg-x-blue/10 flex items-center justify-center text-x-blue border border-x-border">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    ${!isLast ? '<div class="w-0.5 h-full bg-x-border mt-2"></div>' : ''}
+                </div>
+                <div class="flex-1 min-w-0 pb-2">
+                    <div class="flex justify-between items-start">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-white text-[16px]">${exp.company}</span>
+                            <span class="text-x-textDim text-[14px]">${exp.role}</span>
+                        </div>
+                        <span class="text-x-textDim text-[13px] whitespace-nowrap">${exp.duration}</span>
+                    </div>
+                    <div class="text-[15px] mt-2 whitespace-pre-wrap leading-tight text-white">${exp.description}</div>
+                    ${imageHtml}
+                </div>
+            </article>
+        `;
+        container.insertAdjacentHTML('beforeend', expHtml);
+    });
+}
+
+function renderCertificate(certificate) {
+    const container = document.getElementById('posts-container');
+    certificate.forEach((cert) => {
+        let imageHtml = '';
+        if (cert.image) {
+            imageHtml = `
+                <div class="mt-3 rounded-2xl border border-x-border overflow-hidden">
+                    <img src="${cert.image}" alt="Certificate Image" class="w-full h-auto object-cover">
+                </div>
+            `;
+        }
+
+        const certHtml = `
+            <article class="p-4 border-b border-x-border hover:bg-x-hover transition duration-200 flex gap-3">
+                <div class="shrink-0 pt-1">
+                    <div class="w-10 h-10 rounded-full bg-x-blue/10 flex items-center justify-center text-x-blue border border-x-border">
+                        <i class="fa-solid fa-certificate text-xl"></i>
+                    </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex justify-between items-start">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-white text-[16px]">${cert.title}</span>
+                            <span class="text-x-textDim text-[14px]">${cert.issuer}</span>
+                        </div>
+                        <span class="text-x-textDim text-[13px]">${cert.date}</span>
+                    </div>
+                    <div class="text-[15px] mt-2 whitespace-pre-wrap leading-tight text-white">${cert.description}</div>
+                    ${imageHtml}
+                </div>
+            </article>
+        `;
+        container.insertAdjacentHTML('beforeend', certHtml);
+    });
+}
+
+function renderContact() {
+    const container = document.getElementById('posts-container');
+    const contactHtml = `
+        <div class="p-8 flex flex-col items-center text-center">
+            <div class="w-20 h-20 rounded-full bg-x-blue/10 flex items-center justify-center text-x-blue mb-6">
+                <i class="fa-solid fa-envelope text-4xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Let's work together</h2>
+            <p class="text-x-textDim text-[15px] mb-8 max-w-md">I'm currently looking for full-time opportunities or freelance projects. Check my links below or send me an email.</p>
+            
+            <a href="mailto:your.email@example.com" class="bg-x-blue hover:bg-x-blueHover text-white font-bold py-3 px-8 rounded-full transition duration-200 shadow-md">
+                Send an Email
+            </a>
+            
+            <div class="flex gap-6 mt-12">
+                <a href="${portfolioData.profile.link}" target="_blank" class="w-12 h-12 rounded-full border border-x-border flex items-center justify-center text-white hover:bg-x-hover transition duration-200 group">
+                    <i class="fa-brands fa-github text-xl group-hover:text-x-blue"></i>
+                </a>
+                <a href="#" target="_blank" class="w-12 h-12 rounded-full border border-x-border flex items-center justify-center text-white hover:bg-x-hover transition duration-200 group">
+                    <i class="fa-brands fa-linkedin-in text-xl group-hover:text-x-blue"></i>
+                </a>
+                <a href="#" target="_blank" class="w-12 h-12 rounded-full border border-x-border flex items-center justify-center text-white hover:bg-x-hover transition duration-200 group">
+                    <i class="fa-brands fa-instagram text-xl group-hover:text-x-blue"></i>
+                </a>
+            </div>
+        </div>
+    `;
+    container.innerHTML = contactHtml;
+}
