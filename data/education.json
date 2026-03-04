@@ -4,16 +4,16 @@
             "school": "SMK IDN Boarding School Solo",
             "degree": "Rekayasa Perangkat Lunak (RPL)",
             "duration": "2021 - 2024",
-            "logo": "./assets/education logo/IDN logo.png",
-            "image": "https://placehold.co/600x400?text=Placeholder+Image+for+IDN",
+            "logo": "./assets/education/logo/IDN%20logo.png",
+            "image": "./assets/education/foto/sekolah%20IDN.png",
             "description": "Fokus mendalami dunia Software Engineering, terutama dalam pengembangan aplikasi web (Frontend & Backend). Di sini saya tidak hanya belajar coding secara intensif dengan pendekatan project-based learning, tetapi juga dibentuk menjadi individu yang disiplin melalui sistem boarding school. Terbiasa berkolaborasi dalam tim, memecahkan masalah logika pemrograman, serta mengikuti best-practices dalam industri teknologi."
         },
         {
             "school": "SMPIC Anak Bangsa",
             "degree": "Junior High School",
             "duration": "2018 - 2021",
-            "logo": "./assets/education logo/SMPIC logo.jpg",
-            "image": "https://placehold.co/600x400?text=Placeholder+Image+for+SMPIC",
+            "logo": "./assets/education/logo/SMPIC%20logo.jpg",
+            "image": "./assets/education/foto/smpic.jpeg",
             "description": "Masa di mana saya mulai membangun fondasi kepemimpinan dan public speaking. Menjabat sebagai pengurus OSIS yang melatih saya dalam mengambil keputusan dan bekerja sama dalam organisasi. Selain itu, saya aktif berpartisipasi sebagai panitia dalam berbagai event sekolah, yang mengasah kemampuan problem solving, manajemen waktu, serta komunikasi sebelum terjun ke dunia IT."
         }
     ]
