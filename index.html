@@ -1,237 +1,250 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-width=1.0">
-    <title>Yusuf Albana (@yusufxalbana) / X Portfolio</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="./assets/YNA/logo%20YNA.svg">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YNA | Portfolio</title>
+    <meta name="description" content="Portfolio of YNA, showcasing projects, skills, and certifications.">
     
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        x: {
-                            black: '#000000',
-                            darkGray: '#16181C',
-                            border: '#2F3336',
-                            text: '#E7E9EA',
-                            textDim: '#71767B',
-                            blue: '#1D9BF0',
-                            blueHover: '#1A8CD8',
-                            hover: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #000000;
-            color: #E7E9EA;
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #000000; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2F3336; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #71767B; 
-        }
-        
-        /* Tab transitions */
-        .tab-indicator {
-            transition: all 0.2s ease-in-out;
-        }
-        /* Hidden until JS loads */
-        .cloak {
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-    </style>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Boxicons for standard icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="antialiased min-h-screen">
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="assets/YNA/logo YNA.svg" alt="YNA Logo">
+                <span>YNA.</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#certifications">Certificates</a></li>
+            </ul>
+            <div class="menu-toggle">
+                <i class='bx bx-menu'></i>
+            </div>
+        </div>
+    </nav>
 
-    <div class="max-w-[1280px] mx-auto flex justify-center min-h-screen">
-        
-        <!-- Left Sidebar (Navigation) -->
-        <header class="w-[88px] xl:w-[275px] flex flex-col items-center xl:items-start xl:px-3 py-2 border-r border-x-border shrink-0 sticky top-0 h-screen overflow-y-auto">
-            <div class="w-full flex flex-col items-center xl:items-start gap-1">
-                <!-- Logo -->
-                <a href="#" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-x-hover transition duration-200 mb-2 xl:ml-2">
-                    <img src="./assets/YNA/logo%20YNA.svg" alt="YNA Logo" class="w-8 h-8 xl:w-9 xl:h-9">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2 class="greeting">Hello, I'm</h2>
+            <h1 class="name">YNA</h1>
+            <h3 class="role">Creative <span class="highlight">Developer</span></h3>
+            <p class="description">
+                I build interactive, modern, and beautiful web experiences. 
+                Welcome to my digital space where I showcase my work and journey.
+            </p>
+            <div class="hero-buttons">
+                <a href="#projects" class="btn primary-btn">View My Work</a>
+                <a href="assets/YNA/CV YNA.pdf" target="_blank" class="btn secondary-btn">
+                    <i class='bx bx-download'></i> Download CV
                 </a>
-                
-                <!-- Nav Links -->
-                <nav class="w-full flex flex-col items-center xl:items-start gap-2" id="nav-links">
-                    <a href="#" data-target="posts" class="nav-link active group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-solid fa-user text-2xl xl:mr-5 font-bold"></i>
-                        <span class="hidden xl:block text-xl font-bold">Profile</span>
-                    </a>
-                    <a href="#" data-target="projects" class="nav-link group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-solid fa-laptop-code text-2xl xl:mr-5 text-x-textDim group-hover:text-white transition duration-200"></i>
-                        <span class="hidden xl:block text-xl text-x-textDim group-hover:text-white transition duration-200">Projects</span>
-                    </a>
-
-                    <a href="#" data-target="education" class="nav-link group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-solid fa-graduation-cap text-2xl xl:mr-5 text-x-textDim group-hover:text-white transition duration-200"></i>
-                        <span class="hidden xl:block text-xl text-x-textDim group-hover:text-white transition duration-200">Education</span>
-                    </a>
-                    <a href="#" data-target="experience" class="nav-link group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-solid fa-briefcase text-2xl xl:mr-5 text-x-textDim group-hover:text-white transition duration-200"></i>
-                        <span class="hidden xl:block text-xl text-x-textDim group-hover:text-white transition duration-200">Experience</span>
-                    </a>
-                    <a href="#" data-target="certificate" class="nav-link group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-solid fa-certificate text-2xl xl:mr-5 text-x-textDim group-hover:text-white transition duration-200"></i>
-                        <span class="hidden xl:block text-xl text-x-textDim group-hover:text-white transition duration-200">Certificate</span>
-                    </a>
-                    <a href="#" data-target="contact" class="nav-link group flex items-center xl:justify-start justify-center w-max p-3 rounded-full hover:bg-x-hover transition duration-200">
-                        <i class="fa-solid fa-envelope text-2xl xl:mr-5 text-x-textDim group-hover:text-white transition duration-200"></i>
-                        <span class="hidden xl:block text-xl text-x-textDim group-hover:text-white transition duration-200">Contact</span>
-                    </a>
-                </nav>
-
-                <!-- CV Button -->
-                <a href="./assets/YNA/CV%20YNA.pdf" download="CV_YusufAlbana.pdf" class="w-12 h-12 xl:w-[90%] xl:h-[52px] bg-x-blue hover:bg-x-blueHover text-white rounded-full font-bold text-[17px] mt-4 shadow-md transition duration-200 flex items-center justify-center">
-                    <i class="fa-solid fa-file-pdf xl:hidden text-xl"></i>
-                    <span class="hidden xl:block">Download CV</span>
-                </a>
-
-                <!-- Hire/Contact Card -->
-                <div class="hidden xl:block bg-x-darkGray rounded-2xl p-4 mt-6 border border-x-border w-[90%]">
-                    <h2 class="font-extrabold text-[16px] mb-2 leading-6">Let's Connect!</h2>
-                    <p class="text-[13px] text-x-textDim mb-3 leading-snug">I'm currently looking for full-time opportunities. Let's build something amazing together.</p>
-                    <a href="mailto:your.email@example.com" class="inline-block text-center bg-x-blue hover:bg-x-blueHover text-white font-bold py-1.5 px-4 rounded-full text-[13px] transition duration-200 w-full">
-                        Hire Me
-                    </a>
-                </div>
             </div>
+        </div>
+        <div class="hero-image">
+            <div class="img-wrapper">
+                <img src="assets/YNA/FOTO YNA.jpg" alt="YNA Portrait">
+            </div>
+        </div>
+    </section>
 
-        </header>
-
-        <!-- Main Content (Feed) -->
-        <main class="w-full sm:w-[598px] md:w-[600px] border-r border-x-border shrink-0 pb-20 sm:pb-0">
-
-
-            <!-- Profile Info Section -->
-            <div class="cloak" id="profile-container">
-                <!-- Cover Image -->
-                <div class="h-[200px] w-full bg-x-darkGray overflow-hidden relative group">
-                    <img id="profile-cover" src="" alt="Cover Image" class="w-full h-full object-cover cursor-pointer">
-                </div>
-
-                <!-- Profile Details -->
-                <div class="px-4 relative pb-4">
-                    <!-- Avatar -->
-                    <div class="flex justify-between items-start -mt-16 mb-2">
-                        <div class="w-[134px] h-[134px] rounded-full border-4 border-black relative bg-black cursor-pointer">
-                            <img id="profile-avatar" src="" alt="Avatar" class="w-full h-full rounded-full object-cover">
-                        </div>
-                    </div>
-
-                    <!-- Name & Handle -->
-                    <div class="mb-3">
-                        <h1 id="profile-name" class="font-extrabold text-[20px] leading-6"></h1>
-                        <p id="profile-handle" class="text-x-textDim text-[15px]"></p>
-                    </div>
-
-                    <!-- Bio -->
-                    <div id="profile-bio" class="text-[15px] mb-3 leading-snug whitespace-pre-wrap"></div>
-
-                    <!-- Meta Data -->
-                    <div class="flex flex-wrap gap-4 text-[15px] text-x-textDim mb-3">
-                        <span class="flex items-center gap-1">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span id="profile-location"></span>
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <i class="fa-solid fa-link"></i>
-                            <a id="profile-link" href="#" class="text-x-blue hover:underline"></a>
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <i class="fa-regular fa-calendar-days"></i>
-                            <span id="profile-joined"></span>
-                        </span>
-                    </div>
-
-                    <!-- Follow Counts -->
-                    <div class="flex gap-4 text-[15px]">
-                        <a href="#" class="hover:underline flex gap-1">
-                            <span id="profile-following" class="font-bold text-white"></span>
-                            <span class="text-x-textDim">Following</span>
-                        </a>
-                        <a href="#" class="hover:underline flex gap-1">
-                            <span id="profile-followers" class="font-bold text-white"></span>
-                            <span class="text-x-textDim">Followers</span>
-                        </a>
+    <!-- Education Section -->
+    <section id="about" class="education">
+        <h2 class="section-title">My <span>Journey</span></h2>
+        <div class="edu-container">
+            <!-- IDN -->
+            <div class="edu-card glass">
+                <div class="edu-header">
+                    <img src="assets/education/logo/IDN logo.png" alt="IDN Logo" class="edu-logo">
+                    <div>
+                        <h3>SMK IDN Boarding School</h3>
+                        <p class="edu-period">Vocational High School</p>
                     </div>
                 </div>
-            </div>
-
-            <!-- Pinned Tweet -->
-            <div id="pinned-header" class="px-4 py-3 border-b border-x-border flex items-center gap-2 text-x-textDim text-[13px] font-bold">
-                <i class="fa-solid fa-thumbtack ml-6"></i> Pinned
-            </div>
-
-            <!-- Feed (Tweets Container) -->
-            <div id="posts-container" class="cloak pb-20">
-                <!-- Posts inserted by JS -->
-            </div>
-
-            <!-- Loading Spinner (temporary) -->
-            <div id="loading" class="flex justify-center p-8">
-                <i class="fa-solid fa-circle-notch fa-spin text-x-blue text-2xl"></i>
+                <div class="edu-body">
+                    <img src="assets/education/foto/sekolah IDN.png" alt="IDN School" class="edu-photo">
+                </div>
             </div>
             
-        </main>
-
-        <!-- Right Sidebar (Trends/Suggestions) -->
-        <aside class="hidden lg:block w-[350px] pl-8 shrink-0 pb-10 sticky top-0 h-screen overflow-y-auto pt-4">
-            <div class="cloak" id="right-sidebar-content">
-                <!-- Skills Card -->
-                <div class="bg-x-darkGray rounded-2xl mb-4 pt-4 pb-4 px-4 overflow-hidden">
-                    <h2 class="font-extrabold text-[20px] mb-3">Skills</h2>
-                    <div id="sidebar-skills-container" class="flex flex-col gap-4">
-                        <!-- Skills inserted by JS -->
+            <!-- SMPIC -->
+            <div class="edu-card glass">
+                <div class="edu-header">
+                    <img src="assets/education/logo/SMPIC logo.jpg" alt="SMPIC Logo" class="edu-logo">
+                    <div>
+                        <h3>SMPIC</h3>
+                        <p class="edu-period">Junior High School</p>
                     </div>
                 </div>
-
-
-
-                <!-- Footer Links -->
-                <div class="flex flex-wrap gap-x-3 gap-y-1 px-4 text-[13px] text-x-textDim">
-                    <a href="https://github.com/yusufxalbana" target="_blank" class="hover:underline">GitHub</a>
-                    <a href="#" target="_blank" class="hover:underline">LinkedIn</a>
-                    <a href="#" target="_blank" class="hover:underline">Instagram</a>
-                    <a href="#" target="_blank" class="hover:underline">Behance</a>
-                    <span>Portfolio v1.0</span>
-                    <span>© 2026 Yusuf Albana. All rights reserved.</span>
+                <div class="edu-body">
+                    <img src="assets/education/foto/smpic.jpeg" alt="SMPIC School" class="edu-photo">
                 </div>
             </div>
-        </aside>
+        </div>
+    </section>
 
-    </div>
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <h2 class="section-title">Tech <span>Stack</span></h2>
+        <div class="skills-grid">
+            <!-- Frontend -->
+            <div class="skill-category glass">
+                <h3>Frontend</h3>
+                <div class="skill-items">
+                    <img src="assets/icon skill/html.png" alt="HTML" title="HTML">
+                    <img src="assets/icon skill/css.png" alt="CSS" title="CSS">
+                    <img src="assets/icon skill/JS.png" alt="JavaScript" title="JavaScript">
+                    <img src="assets/icon skill/react.png" alt="React" title="React">
+                    <img src="assets/icon skill/tailwind.png" alt="Tailwind CSS" title="Tailwind CSS">
+                </div>
+            </div>
+            
+            <!-- Backend & Programming -->
+            <div class="skill-category glass">
+                <h3>Backend & Programming</h3>
+                <div class="skill-items">
+                    <img src="assets/icon skill/PHP.png" alt="PHP" title="PHP">
+                    <img src="assets/icon skill/laravel.png" alt="Laravel" title="Laravel">
+                    <img src="assets/icon skill/nodejs.png" alt="Node.js" title="Node.js">
+                    <img src="assets/icon skill/phython.png" alt="Python" title="Python">
+                    <img src="assets/icon skill/MongoDB_Logo.png" alt="MongoDB" title="MongoDB">
+                </div>
+            </div>
+            
+            <!-- Tools & Others -->
+            <div class="skill-category glass">
+                <h3>Design, Mobile & Tools</h3>
+                <div class="skill-items">
+                    <img src="assets/icon skill/figma.png" alt="Figma" title="Figma">
+                    <img src="assets/icon skill/canva.png" alt="Canva" title="Canva">
+                    <img src="assets/icon skill/capcut.png" alt="Capcut" title="Capcut">
+                    <img src="assets/icon skill/flutter.png" alt="Flutter" title="Flutter">
+                    <img src="assets/icon skill/dart.png" alt="Dart" title="Dart">
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <h2 class="section-title">Featured <span>Projects</span></h2>
+        <div class="project-grid">
+            
+            <div class="project-card glass">
+                <div class="project-img">
+                    <img src="assets/project/Film-LK21-Vibe.png" alt="Film LK21 Vibe">
+                </div>
+                <div class="project-info">
+                    <h3>Film LK21 Vibe</h3>
+                    <p>A movie streaming platform UI inspired by LK21 vibes.</p>
+                </div>
+            </div>
+            
+            <div class="project-card glass">
+                <div class="project-img">
+                    <img src="assets/project/Klinik-Gigi-Sehat-Layanan-Kesehatan-Gigi-Profesional-Klinik-Gigi-Sehat.png" alt="Klinik Gigi Sehat">
+                </div>
+                <div class="project-info">
+                    <h3>Klinik Gigi Sehat</h3>
+                    <p>Professional dental clinic service landing page.</p>
+                </div>
+            </div>
+            
+            <div class="project-card glass">
+                <div class="project-img">
+                    <img src="assets/project/moodvibes.png" alt="Moodvibes">
+                </div>
+                <div class="project-info">
+                    <h3>Moodvibes</h3>
+                    <p>Application or website for mood tracking and ambiance.</p>
+                </div>
+            </div>
 
+            <div class="project-card glass">
+                <div class="project-img">
+                    <img src="assets/project/AI scedule generator.png" alt="AI Schedule Generator">
+                </div>
+                <div class="project-info">
+                    <h3>AI Schedule Generator</h3>
+                    <p>Smart schedule generation using Artificial Intelligence.</p>
+                </div>
+            </div>
+            
+            <div class="project-card glass">
+                <div class="project-img">
+                    <img src="assets/project/Reading-List-App.png" alt="Reading List App">
+                </div>
+                <div class="project-info">
+                    <h3>Reading List App</h3>
+                    <p>Manage and track your reading progress effectively.</p>
+                </div>
+            </div>
+            
+            <div class="project-card glass">
+                <div class="project-img">
+                    <img src="assets/project/qr scan & generate.png" alt="QR Scan & Generate">
+                </div>
+                <div class="project-info">
+                    <h3>QR Scan & Generate</h3>
+                    <p>A utility tool for quickly scanning and creating QR codes.</p>
+                </div>
+            </div>
 
-    <script src="js/app.js"></script>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="certifications">
+        <h2 class="section-title">My <span>Certificates</span></h2>
+        <div class="cert-carousel">
+            <div class="cert-track">
+                <!-- Using images from sertifikat folder -->
+                <img src="assets/sertifikat/Belajar Front-end for Beginners.jpg" onerror="this.src='assets/sertifikat/Front-end for Beginners.jpg'" alt="Certificate">
+                <img src="assets/sertifikat/Belajar Dasar Cloud dan Gen AI di AWS.jpg" alt="Certificate">
+                <img src="assets/sertifikat/Belajar Membuat Aplikasi Flutter untuk Pemula.jpg" alt="Certificate">
+                <img src="assets/sertifikat/Belajar dasar Pemograman web.jpg" alt="Certificate">
+                <img src="assets/sertifikat/CSS.jpg" alt="Certificate">
+                <img src="assets/sertifikat/GDG (google Developer Groups).jpg" alt="Certificate">
+                <img src="assets/sertifikat/HTML.jpg" alt="Certificate">
+                <img src="assets/sertifikat/JS.jpg" alt="Certificate">
+                <img src="assets/sertifikat/Web development.jpg" alt="Certificate">
+                <img src="assets/sertifikat/belajar dasar AI.jpg" alt="Certificate">
+                <img src="assets/sertifikat/lomba Poster Design.jpg" alt="Certificate">
+                <img src="assets/sertifikat/python.jpg" alt="Certificate">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="assets/YNA/logo YNA.svg" alt="YNA Logo">
+                <span>YNA.</span>
+            </div>
+            <p>&copy; 2026 YNA. All rights reserved.</p>
+            <div class="socials">
+                <a href="#"><i class='bx bxl-github'></i></a>
+                <a href="#"><i class='bx bxl-linkedin'></i></a>
+                <a href="#"><i class='bx bxl-instagram'></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="script.js"></script>
 </body>
 </html>
